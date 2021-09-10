@@ -1,0 +1,7 @@
+public/client/css
+public/client/js
+server/auth
+server/data
+server/node_modules
+server/root/dat
+tmp
