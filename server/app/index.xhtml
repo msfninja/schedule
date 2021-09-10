@@ -1,0 +1,47 @@
+{component.doctype}
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" dir="ltr">
+	<head>
+		{component.meta}
+		{component.usr.pwa}
+		{component.link}
+		<title>{app.name}</title>
+	</head>
+	<body>
+		{component.noscript}
+		{component.loader}
+		<div style="opacity: 0;" id="cnt">
+			<main>
+				<section id="intro-bg" style="background-image: url('/client/media/img/def/img_0001.jpg') !important; filter: brightness(.7);"></section>
+				<section id="intro" style="background-color: #1b872b60;"></section>
+				<section class="tab" id="#to-dos" style="transform: translate(0,0) !important;">
+					<div class="h3">
+						<span>Hi, {user.name}!</span>
+					</div>
+				</section>
+				<section class="tab" id="#notes">
+					<div class="h3">
+						<span>Notes</span>
+					</div>
+				</section>
+				<section class="tab" id="#other">
+					<div class="h3">
+						<span>Other</span>
+					</div>
+				</section>
+				<section class="tab" id="#calendar">
+					<div class="h3">
+						<span>Calendar</span>
+					</div>
+				</section>
+				<section class="tab" id="#school">
+					<div class="h3">
+						<span>School</span>
+					</div>
+				</section>
+			</main>
+			{component.usr.nav}
+		</div>
+		{component.script}
+		{component.usr.script}
+	</body>
+</html>
