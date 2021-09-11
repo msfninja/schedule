@@ -2,11 +2,11 @@
 
 # Schedule | To-dos, Notes And More
 
-### [http://143.176.32.149:143](http://143.176.32.149:143)
+## [https://143.176.32.149:143](https://143.176.32.149:143)
 
 Please note that currently the project is under development. This means none of the code in this repository is guaranteed to be working.
 
-Schedule is a web application that allows you to create todos, take notes, and other miscellaneous stuff like a your school timetable. A handy tool for any student. It can be used on a desktop or a mobile device. For accessibility, Schedule also offers a PWA, so you can install it as an app on your phone (or desktop). The app is easy to use, has a straightforward UI and works seamlessly.
+Schedule is a web application that allows you to create to-dos, take notes, and other miscellaneous stuff like dda your school timetable. A handy tool for any student. It can be used on a desktop or a mobile device. For accessibility, Schedule also offers a PWA, so you can install it as an app on any device. The app is easy to use, has a straightforward UI and works seamlessly. Schedule is also privacy-friendly. It stores all user data encrypted using the AES-256 Bit encryption algorithm.
 
 <table>
 	<tr>
@@ -25,15 +25,16 @@ Schedule is a web application that allows you to create todos, take notes, and o
 						<li><a href="#sass">Sass</a></li>
 						<li><a href="#coffeescript">CoffeeScript</a></li>
 						<li><a href="#yaml">YAML</a></li>
-						<li><a href="#crypto">crypto</a></li>
-						<li><a href="#uuid">uuid</a></li>
-						<li><a href="#ip">ip</a></li>
+						<li><a href="#other">Other</a></li>
+						<!-- <li><a href="#uuid">uuid</a></li>
+						<li><a href="#ip">ip</a></li> -->
 					</ol>
 					<li><a href="#git">Git</a></li>
 				</ol>
 				<li><a href="#cloning">Cloning</a></li>
 				<li><a href="#server">Server</a></li>
 				<ol>
+					<li><a href="#ssl-certificate">SSL certificate</a></li>
 					<li><a href="#initiation">Initiation</a></li>
 					<li><a href="#configuration">Configuration</a></li>
 					<li><a href="#sass-1">Sass</a></li>
@@ -47,7 +48,7 @@ Schedule is a web application that allows you to create todos, take notes, and o
 
 ## Notice
 
-Schedule is an open source project licensed under the GNU GPLv3. To see what you may and may not do with the source code of this project, see the [license](https://github.com/msfninja/schedule/main/LICENSE). The license can also be found in the root directory of the project as `LICENSE`.
+Schedule is an open source project licensed under the GNU GPLv3. To see what you may and may not do with the source code of this project, see the [license](https://github.com/msfninja/schedule/blob/main/LICENSE). The license can also be found in the root directory of the project as `LICENSE`.
 
 ## Prerequisites
 
@@ -70,14 +71,14 @@ Apart from Node.js, this node app requires several modules to operate properly w
 
 #### nodemon
 
-This one is optional, but really makes your life simpler. Instead of manually reinitiating your node app upon each a crash or modification to the node app's source code, you can automate this process using [nodemon](https://nodemon.io/). To install nodemon, run the following command in your shell:
+This one is optional, but really makes your life simpler. Instead of manually reinitiating your node app upon each a crash or modification to the node app's source code, you can automate this process by using [nodemon](https://nodemon.io/). To install nodemon, run the following command in your shell:
 
 ```bash
 npm i -g nodemon
 
 ```
 
-The `-g` flag will install nodemon globally, so you can use it system-wide.
+The `-g` flag will install nodemon globally, so you can use it system-wide in any project.
 
 #### Sass
 
@@ -85,11 +86,7 @@ The `-g` flag will install nodemon globally, so you can use it system-wide.
 
 #### YAML
 
-#### Crypto
-
-#### uuid
-
-#### ip
+#### Other
 
 ### Git
 
