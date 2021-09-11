@@ -4,6 +4,7 @@
 'use strict';
 
 const // modules
+	https = require('https'),
 	http = require('http'),
 	path = require('path'),
 	url = require('url'),
@@ -16,6 +17,12 @@ const // modules
 		v1: uuidv1,
 		v4: uuidv4
 	} = require('uuid');
+
+const // ssl
+	options = {
+		key: fs.readFileSync('key.pem'),
+		cert: fs.readFileSync('cert.pem')
+	};
 
 const // basic variables
 	dir = path.resolve(__dirname,'..');
@@ -33,6 +40,9 @@ const // basic operations
 			match: arr.length > 0,
 			size: arr.length
 		};
+	},
+	format = s => {
+		return s.toLowerCase().replace(/[^a-z0-9\-]/g,'').replace(/ /g,'-');
 	};
 
 try { config = YAML.parse(rd(`${dir}/config.yml`)); }
@@ -60,7 +70,7 @@ const // app functions
 					user = new User(res,req),
 					cookie = cookies(req),
 					dat = user.request('tkn',cookie['UTOKEN']);
-				html = html.replace(/\{component\.usr\.pwa\}/g,rd(`${dir}/server/client/component/usr.pwa.xhtml`)).replace(/\{component\.usr\.script\}/g,rd(`${dir}/server/client/component/usr.script.xhtml`)).replace(/\{component\.usr\.nav\}/g,rd(`${dir}/server/client/component/usr.nav.xhtml`)).replace(/\{nav.tabs\}/g,createNav());
+				html = html.replace(/\{component\.usr\.pwa\}/g,rd(`${dir}/server/client/component/usr.pwa.xhtml`)).replace(/\{component\.usr\.script\}/g,rd(`${dir}/server/client/component/usr.script.xhtml`)).replace(/\{component\.usr\.nav\}/g,rd(`${dir}/server/client/component/usr.nav.xhtml`)).replace(/\{nav.tabs.true\}/g,createNav(true)).replace(/\{nav.tabs.false\}/g,createNav(false));
 				html = html.replace(/\{user\.name\}/g,dat.usr);
 			}
 		}
@@ -79,20 +89,36 @@ const // site functions
 		});
 		return obj;
 	},
-	createNav = () => {
+	createNav = c => {
 		let html = '';
 		config.app.nav.forEach(e => {
-			if (e.nav) {
-				html += `
-					<div title="Go to ${e.name}" class="nav-btn" onclick="window.location.href = '${e.href}';">
-						<div class="ico">
-							<span><i class="bi bi-${e.icon}"></i></span>
+			if (c) {
+				if (e.nav) {
+					html += `
+						<div title="Go to ${e.name}" id="btn-nav-${format(e.name)}" class="nav-btn" onclick="window.location.href = '${e.href}';">
+							<div class="ico">
+								<span><i class="bi bi-${e.icon}"></i></span>
+							</div>
+							<div class="txt">
+								<span>${e.name}</span>
+							</div>
 						</div>
-						<div class="txt">
-							<span>${e.name}</span>
+					`;
+				}
+			}
+			else {
+				if (!e.nav) {
+					html += `
+						<div title="Go to ${e.name}" id="btn-${format(e.name)}" class="btn" onclick="window.location.href = '${e.href}';">
+							<div class="ico">
+								<span><i class="bi bi-${e.icon}"></i></span>
+							</div>
+							<div class="txt">
+								<span>${e.name}</span>
+							</div>
 						</div>
-					</div>
-				`;
+					`;
+				}
 			}
 		});
 		return html;
@@ -149,12 +175,19 @@ function User(res,req) { // user function
 			obj = {
 				usr: o.usr,
 				psw: encrypt(o.psw,`${o.psw}${guid()}`.substr(0,32))
-			};
-		fs.mkdirSync(h);
-		fs.mkdirSync(`${h}/content`);
-		fs.mkdirSync(`${h}/content/calendar`);
-		fs.mkdirSync(`${h}/content/notes`);
-		fs.mkdirSync(`${h}/content/to-dos`);
+			},
+			arr = [
+				h,
+				`${h}/content/calendar`,
+				`${h}/content/notes`,
+				`${h}/content/school`,
+				`${h}/content/to-dos`
+			];
+		arr.forEach(e => {
+			fs.mkdir(e,{ recursive: true },err => {
+				if (err) throw err;
+			});
+		});
 		fs.writeFile(`${h}/data.json`,JSON.stringify(obj),err => {
 			if (err) term(res,500,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/client/err/500.xhtml`,'r'));
 			utokens.create(o.usr,true);
@@ -279,9 +312,9 @@ function UTokens(res) { // user tokens function
 	};
 }
 
-const // http server
+const // https server
 	start = port => {
-		http.createServer((req,res) => {
+		https.createServer(options,(req,res) => {
 			let
 				q = url.parse(req.url,true),
 				p = q.pathname,
@@ -422,6 +455,6 @@ console.clear();
 
 try {
 	start(config.server.port);
-	console.log(`Server running at http://${ip.address()}:${config.server.port}\n\n`);
+	console.log(`Server running at https://${ip.address()}:${config.server.port}\n\n`);
 }
 catch (e) { throw e; }
