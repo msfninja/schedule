@@ -322,7 +322,9 @@ html
 				.nav-btn
 					@include flexbox('flex','column','center','center')
 
-					padding: 3px
+					padding: 3px 20px
+					color: $color
+					transition: $transition !important
 
 					.ico
 						margin: 1px 0
@@ -361,8 +363,7 @@ html
 					bottom: 0
 					left: 0
 					padding: 25px
-					transition: all 500ms cubic-bezier(.25,.1,.25,1) 0ms
-					transform: translate(100vw,0)
+					transition: all 300ms cubic-bezier(.25,.1,.25,1) 0ms
 					z-index: 8000
 
 			input
