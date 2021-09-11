@@ -2,7 +2,7 @@
 	"name": "Schedule",
 	"short_name": "Schedule",
 	"lang": "en",
-	"start_url": "/",
+	"start_url": "/usr",
 	"display": "standalone",
 	"theme_color": "#333333",
 	"background_color": "#333333",
