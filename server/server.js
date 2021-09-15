@@ -1,37 +1,59 @@
+// Schedule node server source code.
+// This file was written by msfninja
+// <msfninja@airmail.cc>.
+//
+// See the Schedule wiki
+// (https://github.com/msfninja/schedule/wiki)
+// for documentation on how this file works,
+// how to use it and how to modify it in a
+// proper way.
+//
 // (c) 2021 Schedule
-// Server source code
 
 'use strict';
 
 const // modules
 	https = require('https'),
-	http = require('http'),
 	path = require('path'),
 	url = require('url'),
 	fs = require('fs'),
 	qs = require('querystring'),
 	ip = require('ip'),
-	YAML = require('yaml'),
 	crypto = require('crypto'),
 	{
 		v1: uuidv1,
 		v4: uuidv4
-	} = require('uuid');
+	} = require('uuid'),
+	YAML = require('yaml'),
+	color = require('colors'),
+	os = require('os');
+
+const // cli object constructor (global scope)
+	cli = new CLI();
+
+const // repo
+	repo = {
+		url: 'https://github.com/msfninja/schedule',
+		blob: 'https://github.com/msfninja/schedule/blob/main'
+	}
+
+const // dirs
+	dir = path.resolve(__dirname,'..'),
+	usr = os.homedir();
 
 const // ssl
-	options = {
-		key: fs.readFileSync('key.pem'),
-		cert: fs.readFileSync('cert.pem')
+	opt = {
+		key: fs.readFileSync(`${dir}/server/ssl/key.pem`),
+		cert: fs.readFileSync(`${dir}/server/ssl/cert.pem`)
 	};
 
-const // basic variables
-	dir = path.resolve(__dirname,'..');
-
-let config; // config
-
 const // basic operations
-	ex = h => { return fs.existsSync(h); },
-	rd = h => { return ex(h) ? fs.readFileSync(h).toString() : ''; },
+	ex = h => {
+		return fs.existsSync(h);
+	},
+	rd = h => {
+		return ex(h) ? fs.readFileSync(h).toString() : '';
+	},
 	compare = (a,b) => {
 		let arr = [];
 		for (var i = 0; i < a.length; i++) for (var j = 0; j < b.length; j++) if (a[i] === b[j]) arr.push(a[i]);
@@ -42,11 +64,18 @@ const // basic operations
 		};
 	},
 	format = s => {
-		return s.toLowerCase().replace(/[^a-z0-9\-]/g,'').replace(/ /g,'-');
+		return s.toLowerCase().replace(/[^a-z0-9\-]/g,'').replace(/ /g,'-'); 
 	};
 
-try { config = YAML.parse(rd(`${dir}/config.yml`)); }
-catch (e) { throw e; }
+let config; // config
+
+try {
+	config = YAML.parse(rd(`${dir}/config.yml`));
+	if (!config) throw new Error('The config.yml file seems to be incorrectly configured.');
+}
+catch (e) {
+	cli.err(true,e.message,`Download the proper config.yml file from the repository:\n\n${repo.blob}/config.yml`);
+}
 
 const // app functions
 	term = (r,s,h,c) => {
@@ -94,35 +123,46 @@ const // site functions
 		config.app.nav.forEach(e => {
 			if (c) {
 				if (e.nav) {
-					html += `
-						<div title="Go to ${e.name}" id="btn-nav-${format(e.name)}" class="nav-btn" onclick="window.location.href = '${e.href}';">
+					html += `<div title="Go to ${e.name}" id="btn-nav-${format(e.name)}" class="nav-btn" onclick="window.location.href = '${e.href}';">
 							<div class="ico">
 								<span><i class="bi bi-${e.icon}"></i></span>
 							</div>
 							<div class="txt">
 								<span>${e.name}</span>
 							</div>
-						</div>
-					`;
+						</div>`;
 				}
 			}
 			else {
 				if (!e.nav) {
-					html += `
-						<div title="Go to ${e.name}" id="btn-${format(e.name)}" class="btn" onclick="window.location.href = '${e.href}';">
+					html += `<div title="Go to ${e.name}" id="btn-${format(e.name)}" class="btn" onclick="window.location.href = '${e.href}';">
 							<div class="ico">
 								<span><i class="bi bi-${e.icon}"></i></span>
 							</div>
 							<div class="txt">
 								<span>${e.name}</span>
 							</div>
-						</div>
-					`;
+						</div>`;
 				}
 			}
 		});
 		return html;
 	};
+
+function CLI() {
+	this.log = s => {
+		console.log(`${config.cli.name.blue.bold}> ${s}`);
+	};
+	this.err = (t,e,s) => {
+		console.clear();
+		console.error(`${'\nERROR:'.red.bold}\n\n${e}\n`);
+		if (s) console.log(`${'SOLUTION:'.blue.bold}\n\n${s}\n`);
+		if (t) process.exit(1);
+	};
+	this.clear = () => {
+		console.clear();
+	};
+}
 
 function Root(res,req) { // root function
 	let rtokens = new RTokens(res);
@@ -314,7 +354,7 @@ function UTokens(res) { // user tokens function
 
 const // https server
 	start = port => {
-		https.createServer(options,(req,res) => {
+		https.createServer(opt,(req,res) => {
 			let
 				q = url.parse(req.url,true),
 				p = q.pathname,
@@ -451,10 +491,9 @@ const // auth
 		return str;
 	};
 
-console.clear();
-
 try {
 	start(config.server.port);
-	console.log(`Server running at https://${ip.address()}:${config.server.port}\n\n`);
+	cli.clear();
+	cli.log(`Server running at https://${ip.address()}:${config.server.port}\n\n`);
 }
 catch (e) { throw e; }
