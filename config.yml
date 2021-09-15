@@ -2,7 +2,7 @@
 app:
   name: "Schedule"
   lname: "Shcedule PWA"
-  title: "To-dos, Notes And More"
+  title: "A To-dos, Notes And More App"
   desc: "Schedule lets you save to-dos, notes, school timetables and more."
   version: "0.0.0"
   release:
@@ -39,3 +39,5 @@ server:
   security:
     token_length: 3
     recover_token_length: 3
+cli:
+  name: "schedule"
