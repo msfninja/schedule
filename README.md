@@ -8,9 +8,9 @@ Official website: [https://143.176.32.149:150](https://143.176.32.149:150).
 
 Schedule is a web application, allowing you to create and save to-dos, notes, calendar events and other miscellaneous information like your school timetable, on a server, and access it from any device<sup id="l-ref-1"><a href="#ref-1">1</a></sup>.
 
-It's a handy tool for any student, or generally anyone who needs to keep track of his tasks or a place to store information in forms of memos. Since Schedule is a web application, implying it is being accessed from a web browser<sup id="l-ref-2"><a href="#ref-2">2</a></sup>, it can be used on virtually any device with a web browser and access to the internet/network on which the server is hosted. For accessibility (specifically on mobile devices), Schedule offers a Progressive Web Application (PWA), so that you can install it as an app, which provides access to it with ease right from your home screen.
+It's a handy tool for any student, or generally anyone who needs to keep track of his tasks or a place to store information in forms of memos. Since Schedule is a web application, implying it is being accessed from a web browser<sup id="l-ref-2"><a href="#ref-2">2</a></sup>, it can be used on virtually any device with a web browser and access to the internet/network on which the server is hosted. For accessibility (specifically on mobile devices), Schedule offers a progressive web application (PWA), so that you can install it as an (browser emulated) app, which provides access to it with ease right from your home screen.
 
-Schedule is easy to use, has a nice and straightforward GUI and works seamlessly. Apart from that, Schedule is also a privacy-friendly utility. It stores all user data<sup id="l-ref-3"><a href="#ref-3">3</a></sup> on the server encrypted, with the Advanced Encryption Standard using a 256 bit key size, this ensures nobody but you can access your data.
+Schedule is easy to use, has a nice and straightforward GUI and works seamlessly. Apart from that, Schedule is also a privacy-friendly utility. It stores all user data<sup id="l-ref-3"><a href="#ref-3">3</a></sup> on the server encrypted, with the Advanced Encryption Standard using a 256 bit key size, which ensures nobody but you can access your data.
 
 <table>
 	<tr>
@@ -92,7 +92,7 @@ This one is optional, but really makes your life easier and frees from a batch o
 npm i -g nodemon
 ```
 
-The `-g` flag will install nodemon globally, so you can use it system-wide in any project<sup><a href="ref-4">4</a></sup>. Again, you can check the version of `nodemon` installed or its presence in the first place by running the following command:
+The `-g` flag will install nodemon globally, so you can use it system-wide in any project<sup id="l-ref-4"><a href="#ref-4">4</a></sup>. Again, you can check the version of `nodemon` installed or its presence in the first place by running the following command:
 
 ```bash
 nodemon --version
@@ -172,10 +172,10 @@ You can always report issues and create pull requests on Schedule's [GitHub repo
 
 ## Notes
 
-<span id="ref-1">1</span> <b><a title="Jump up" href="#l-ref-1">^</a></b> The scope of what devices you can use to access Schedule depends on how your network on which the server runs is configured. If you have configured your router's network address translation (NAT) in regard to your server such for it to be accessible to the World Wide Web (WWW) (which, in case of the absence of such a feature, can be organized with your internet service provider (ISP)), then Schedule would indeed be accessible from any device in the world (with some configurations/routers, it is possible that those devices connected to the same local area network (LAN) to which the server is connected to will not be able to communicate with the server (in cases where you use the IP address of the server, as that is the router's default gateway)).
+<span id="ref-1">1.</span> <b><a title="Jump up" href="#l-ref-1">^</a></b> The scope of what devices you can use to access Schedule depends on how your network on which the server runs is configured. If you have configured your router's network address translation (NAT) in regard to your server such for it to be accessible to the World Wide Web (WWW) (which, in case of the absence of such a feature, can be organized with your internet service provider (ISP)), then Schedule would indeed be accessible from any device in the world (with some configurations/routers, it is possible that those devices connected to the same local area network (LAN) to which the server is connected to will not be able to communicate with the server (in cases where you use the IP address of the server, as that is the router's default gateway)).
 
-<span id="ref-2">2</span> <a title="Jump up" href="#l-ref-2">^</a> Unless you install Schedule as a PWA on your device, in that case you will be accessing it from an self-imitating app, but technically still a browser.
+<span id="ref-2">2.</span> <b><a title="Jump up" href="#l-ref-2">^</a></b> Unless you install Schedule as a PWA on your device, you will be accessing it from a self-imitating app, but technically still a browser.
 
-<span id="ref-3">3</span> <b><a title="Jump up" href="#l-ref-3">^</a></b> User account data (that is saved in the long term by the server unless a user request to delete the data is presented) includes but is not limited to the following: username (this is **not** kept encrypted however, otherwise there would be no way to identify users with Schedule's current design); user password; user to-dos; user notes; and user calendar events.
+<span id="ref-3">3.</span> <b><a title="Jump up" href="#l-ref-3">^</a></b> User account data (that is saved in the long term by the server unless a user request to delete the data is presented) includes but is not limited to the following: username (this is **not** kept encrypted however, otherwise there would be no way to identify users with Schedule's current design); user password; user to-dos; user notes; and user calendar events.
 
-<span id="ref-4">4</span> <b><a title="Jump up" href="#l-ref-4">^</a></b> If you need a different configuration for an npm package/module installation, you can run `npm i --help` to get a list of possible options to be used.
+<span id="ref-4">4.</span> <b><a title="Jump up" href="#l-ref-4">^</a></b> If you need a different configuration for an npm package/module installation, you can run `npm i --help` to get a list of possible options to be used.
