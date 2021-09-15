@@ -1,14 +1,12 @@
-version 0.0.0-alpha 2021-09-09 msfninja <msfninja@airmail.cc>:
+(Unreleased) version 0.0.0-alpha 2021-09-13 msfninja <msfninja@airmail.cc>:
 	
 	Note:
-	Project initation. Summing up all development from its creation to the date of this release.
+	Initiation of project. Summing up all development from its creation to the date of this release.
 
 	Added:
 	 - Client
+	   * A web application accessible from any device (featuring a PWA) to interact with your data
 	 - Server
-
-	Changed:
-
-	Fixed:
-
-	Removed:
+	   * A server that handles the whole thing
+	 - CLI
+	   * A CLI (server-side) that can perform numerous tasks
