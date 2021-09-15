@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "normalize.css": "^8.0.1",
     "yaml": "2.0.0-8"
   }
 }
