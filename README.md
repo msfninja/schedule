@@ -145,6 +145,7 @@ A brief description of what every module is used for:
  - `ip`: the `ip` module is used solely for one purpose&#8212;retrieve the server's IP address. It is not used for any IP logging or anything similar as it may seem. Schedule does not log any data, and you can verify that in the source code.
  - `yaml`: the `yaml` modules is used to parse YAML files. An example can be the `config.yml` file in the root directory of the project, which holds various configuration properties for Schedule that are read by the `server/server.js` file.
  - `uuid`: the `uuid` module is used to generate universally unique IDs. An example usage is using them as tokens for user sessions and similar activities.
+ - `colors`: the `colors` module is really just used to style text output in the console, and thats what its supposed to be used for.
 
 ### Git Installation
 
