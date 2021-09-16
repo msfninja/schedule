@@ -21,10 +21,10 @@ Schedule is easy to use, has a nice and straightforward GUI and works seamlessly
 			<ol start="1">
 				<li><a href="#notice">Notice</a></li>
 				<li><a href="#prerequisites">Prerequisites</a></li>
-				<ol start="1.1">
+				<ol start="1">
 					<li><a href="#nodejs-installation">Node.js Installation</a></li>
 					<li><a href="#npm-modules">Npm Modules</a></li>
-					<ol start="1.1.1">
+					<ol start="1">
 						<li><a href="#nodemon-installation">Nodemon Installation</a></li>
 						<li><a href="#sass-installation">Sass Installation</a></li>
 						<li><a href="#coffeescript-installation">CoffeeScript Installation</a></li>
@@ -34,7 +34,7 @@ Schedule is easy to use, has a nice and straightforward GUI and works seamlessly
 				</ol>
 				<li><a href="#repository-cloning">Repository Cloning</a></li>
 				<li><a href="#server">Server</a></li>
-				<ol start="2.1">
+				<ol start="1">
 					<li><a href="#ssl-certificate-and-pwa">SSL Certificate (And PWA)</a></li>
 					<li><a href="#server-initiation">Server Initiation</a></li>
 					<li><a href="#server-configuration">Server Configuration</a></li>
