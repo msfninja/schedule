@@ -97,7 +97,7 @@ If this returns an error, or doesn't output anything, it means that either Node.
 
 ### Npm Modules
 
-Apart from Node.js, this node app requires several modules to operate properly which do not come preinstalled with Node.js by default. The modules `ip`, `yaml`, `uuid` and `colors` are required for Schedule to work, and other utilities like `nodemon` come in handy, but are optional. Further on there is also Sass and CoffeeScript, but you would only need those if you are planning on modifying any of the files `.sass` or `.coffee` files (presuming you are going to compile the code as well to reflect the changes).
+Apart from Node.js, this node app requires several modules to operate properly which do not come preinstalled with Node.js by default. The modules `ip`, `yaml`, `uuid` and `colors` are required for Schedule to work, and other utilities like `nodemon` come in handy, but are optional. Further on there is also Sass and CoffeeScript, but you would only need those if you are planning on modifying any of the `.sass` or `.coffee` files (presuming you are going to compile the code as well to reflect the changes).
 
 #### Nodemon Installation
 
@@ -107,7 +107,7 @@ This one is optional, but really makes your life easier and frees from a batch o
 npm i -g nodemon
 ```
 
-The `-g` flag will install nodemon globally, so you can use it system-wide in any project<sup id="l-ref-5"><a href="#ref-5">5</a></sup>. Again, you can check the version of `nodemon` installed or its presence in the first place by running the following command:
+The `-g` option will install nodemon globally, so you can use it system-wide in any project<sup id="l-ref-5"><a href="#ref-5">5</a></sup>. Again, you can check the version of `nodemon` installed or its presence in the first place by running the following command:
 
 ```bash
 nodemon --version
@@ -123,7 +123,7 @@ To install Sass on your machine, run this command in your shell:
 npm i -g sass
 ```
 
-The `-g` flag is the same story here as with `nodemon` mentioned [before](#nodemon-installation). You can check what version of Sass you have installed or if it is present by issuing the following command:
+The `-g` option is the same story here as with `nodemon` mentioned [before](#nodemon-installation). You can check what version of Sass you have installed or if it is present by issuing the following command:
 
 ```bash
 sass --version
@@ -277,7 +277,7 @@ And initiate the node server by running this command in your shell:
 nodemon server.js --ignore '*.json'
 ```
 
-The `--ignore` flag is set to `'*.json'` so the server won't reinitiate every time there is a change to any JSON file within the project directory.
+The `--ignore` option is set to `'*.json'` so the server won't reinitiate every time there is a change to any JSON file within the project directory.
 
 ### Server Configuration
 
@@ -296,7 +296,7 @@ Where assumably the default number 150 represents the port. Changing this to a v
 
 Make sure you have Sass installed before proceeding with this section. To see how to install Sass, follow [this section](#sass-installation) first.
 
-So far, Schedule has only 1 Sass style sheet. To compile it into CSS code that is being served to the client, run the below command in your shell (assuming your current working directory is the project's root directory):
+So far, Schedule has only one Sass style sheet. To compile it into CSS code that is being served to the client, run the below command in your shell (assuming your current working directory is the project's root directory):
 
 ```bash
 sass ./server/client/sass/stylesheet.sass ./public/client/css/stylesheet.css
