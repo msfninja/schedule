@@ -1,12 +1,12 @@
-// Schedule node server source code.
-// This file was written by msfninja
+// Schedule node app server source code. This
+// file was written by msfninja
 // <msfninja@airmail.cc>.
 //
 // See the Schedule wiki
 // (https://github.com/msfninja/schedule/wiki)
 // for documentation on how this file works,
-// how to use it and how to modify it in a
-// proper way.
+// how to use it and how to modify it in a proper
+// way.
 //
 // (c) 2021 Schedule
 
@@ -25,7 +25,7 @@ const // modules
 		v4: uuidv4
 	} = require('uuid'),
 	YAML = require('yaml'),
-	color = require('colors'),
+	colors = require('colors'),
 	os = require('os');
 
 const // cli object constructor (global scope)
@@ -39,7 +39,10 @@ const // repo
 
 const // dirs
 	dir = path.resolve(__dirname,'..'),
-	usr = os.homedir();
+	dirs = {
+		usr: os.homedir(),
+		dat: path.join(os.homedir(),'schedule')
+	};
 
 const // ssl
 	opt = {
@@ -119,8 +122,10 @@ const // site functions
 		return obj;
 	},
 	createNav = c => {
-		let html = '';
-		config.app.nav.forEach(e => {
+		let
+			html = '',
+			navdat = YAML.parse(rd(`${dir}/nav.yml`));
+		navdat.forEach(e => {
 			if (c) {
 				if (e.nav) {
 					html += `<div title="Go to ${e.name}" id="btn-nav-${format(e.name)}" class="nav-btn" onclick="window.location.href = '${e.href}';">
@@ -191,7 +196,7 @@ function Root(res,req) { // root function
 			let obj = {};
 			obj.usr = a[0];
 			obj.psw = encrypt(a[1],`${a[1]}${guid()}`.substr(0,32));
-			fs.writeFile(`${dir}/server/root/dat/keys.hash`,JSON.stringify(obj),err => {
+			fs.writeFile(`${dirs.dat}/auth/root/dat/keys.hash`,JSON.stringify(obj),err => {
 				if (err) throw err;
 			});
 		}
@@ -211,16 +216,14 @@ function User(res,req) { // user function
 
 	this.create = o => { // create user account
 		let
-			h = `${dir}/server/dat/usr/${o.usr}`,
+			h = `${dirs.dat}/usr/${o.usr}`,
 			obj = {
 				usr: o.usr,
 				psw: encrypt(o.psw,`${o.psw}${guid()}`.substr(0,32))
 			},
 			arr = [
-				h,
 				`${h}/content/calendar`,
 				`${h}/content/notes`,
-				`${h}/content/school`,
 				`${h}/content/to-dos`
 			];
 		arr.forEach(e => {
@@ -236,16 +239,16 @@ function User(res,req) { // user function
 	this.verify = a => { // verify user credentials or token
 		if (a) {
 			if (Object.prototype.toString.call(a) === '[object Array]') {
-				let usr = fs.readdirSync(`${dir}/server/dat/usr`).find(e => e === a[0]);
+				let usr = fs.readdirSync(`${dirs.dat}/usr`).find(e => e === a[0]);
 				if (usr) {
-					let dat = JSON.parse(rd(`${dir}/server/dat/usr/${usr}/data.json`));
+					let dat = JSON.parse(rd(`${dirs.dat}/usr/${usr}/data.json`));
 					if (dat.usr === a[0] && decrypt(dat.psw,`${a[1]}${guid()}`.substr(0,32)) === a[1]) {
 						return true;
 					}
 				}
 			}
 			else if (typeof a === 'string') {
-				let tkn = fs.readdirSync(`${dir}/server/dat/usr`).find(e => utokens.verify(JSON.parse(rd(`${dir}/server/dat/usr/${e}/data.json`)).utoken));
+				let tkn = fs.readdirSync(`${dirs.dat}/usr`).find(e => utokens.verify(JSON.parse(rd(`${dirs.dat}/usr/${e}/data.json`)).utoken));
 				return tkn ? true : false;
 			}
 		}
@@ -260,22 +263,22 @@ function User(res,req) { // user function
 		}
 	};
 	this.check = u => { // check if user exists
-		let usr = fs.readdirSync(`${dir}/server/dat/usr`).find(e => e === u);
+		let usr = fs.readdirSync(`${dirs.dat}/usr`).find(e => e === u);
 		return usr ? true : false;
 	};
 	this.request = (t,r) => { // request user data by username or token
-		let usr = fs.readdirSync(`${dir}/server/dat/usr`);
+		let usr = fs.readdirSync(`${dirs.dat}/usr`);
 		if (usr) {
 			if (t === 'usr') {
 				let target = usr.find(e => e === r);
 
-				if (target) return JSON.parse(rd(`${dir}/server/dat/usr/${r}/data.json`));
+				if (target) return JSON.parse(rd(`${dirs.dat}/usr/${r}/data.json`));
 			}
 			else if (t === 'tkn') {
 				if (utokens.get()) {
 					let target = utokens.get().find(e => e.tkn === r);
 
-					if (target) return JSON.parse(rd(`${dir}/server/dat/usr/${target.usr}/data.json`));
+					if (target) return JSON.parse(rd(`${dirs.dat}/usr/${target.usr}/data.json`));
 				}
 			}
 		}
@@ -287,7 +290,7 @@ function UTokens(res) { // user tokens function
 	let utokens;
 
 	try {
-		utokens = JSON.parse(rd(`${dir}/server/auth/usr/tokens.json`));
+		utokens = JSON.parse(rd(`${dirs.dat}/auth/usr/tokens.json`));
 	}
 	catch (e) { utokens = false; }
 
@@ -297,7 +300,7 @@ function UTokens(res) { // user tokens function
 	this.create = (u,c) => { // create user token
 		let
 			time = new Date().valueOf(),
-			expires = 100 * 60 * 60 * 24 * 30 *12,
+			expires = config.server.usr.session.time,
 			token = getuuid(1),
 			arr = [],
 			obj = {
@@ -307,12 +310,12 @@ function UTokens(res) { // user tokens function
 			};
 		if (utokens) arr = utokens;
 		arr.push(obj);
-		fs.writeFile(`${dir}/server/auth/usr/tokens.json`,JSON.stringify(arr),err => {
+		fs.writeFile(`${dirs.dat}/auth/usr/tokens.json`,JSON.stringify(arr),err => {
 			if (err) term(res,500,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/client/err/500.xhtml`,'r'));
 		});
-		obj = JSON.parse(rd(`${dir}/server/dat/usr/${u}/data.json`));
+		obj = JSON.parse(rd(`${dirs.dat}/dat/usr/${u}/data.json`));
 		obj.utoken = token;
-		fs.writeFile(`${dir}/server/dat/usr/${u}/data.json`,JSON.stringify(obj),err => {
+		fs.writeFile(`${dirs.dat}/usr/${u}/data.json`,JSON.stringify(obj),err => {
 			if (err) term(res,500,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/client/err/500.xhtml`,'r'));
 		});
 		if (c) term(res,302,{'Set-Cookie':`UTOKEN=${token}; Path=/;`,'Location':'/usr'});
@@ -324,7 +327,7 @@ function UTokens(res) { // user tokens function
 		}
 		return false;
 	};
-	this.delete = (t,c,d) => { // delete user token from array and user data
+	this.delete = (t,c,d) => { // delete user token from tokens.json and/or user data
 		if (utokens) {
 			let
 				user = new User(res),
@@ -334,13 +337,13 @@ function UTokens(res) { // user tokens function
 			if (target) {
 				if (c) {
 					utokens.splice(utokens.indexOf(target),1);
-					fs.writeFile(`${dir}/server/auth/usr/tokens.json`,JSON.stringify(utokens),err => {
+					fs.writeFile(`${dirs.dat}/auth/usr/tokens.json`,JSON.stringify(utokens),err => {
 						if (err) throw err;
 					});
 				}
 				if (d) {
 					delete dat.utoken;
-					fs.writeFile(`${dir}/server/dat/usr/${dat.usr}/data.json`,JSON.stringify(dat),err => {
+					fs.writeFile(`${dirs.dat}/usr/${dat.usr}/data.json`,JSON.stringify(dat),err => {
 						if (err) throw err;
 					});
 				}
@@ -478,12 +481,22 @@ const // security
 	recover = getuuid(config.server.security.recover_token_length);
 
 const // auth
-	keys = t => { return JSON.parse(rd(`${dir}/server/root/dat/keys.hash`))[t]; },
+	keys = t => {
+		let h = `${dirs.dat}/auth/root/dat/keys.hash`;
+		if (ex(h)) {
+			try {
+				return JSON.parse(rd(`${dirs.dat}/auth/root/dat/keys.hash`))[t];
+			}
+			catch (e) {
+				cli.err(true,`There was an error retrieving root account credentials:\n\n${e}`);
+			}
+		}
+	},
 	guid = () => {
-		let str = rd(`${dir}/server/auth/guid.asc`);
+		let str = rd(`${dirs.dat}/auth/guid.asc`);
 		if (str.split('').length !== 32) {
 			let nguuid = getuuid(1);
-			fs.writeFile(`${dir}/server/auth/guid.asc`,nguuid,err => {
+			fs.writeFile(`${dirs.dat}/auth/guid.asc`,nguuid,err => {
 				if (err) throw err;
 			});
 			return nguuid;
@@ -491,9 +504,16 @@ const // auth
 		return str;
 	};
 
-try {
-	start(config.server.port);
-	cli.clear();
-	cli.log(`Server running at https://${ip.address()}:${config.server.port}\n\n`);
+if (rd(`${dir}/server/init`)) {
+	try {
+		start(config.server.port);
+		cli.clear();
+		cli.log(`Server running at https://${ip.address()}:${config.server.port}\n\n`);
+	}
+	catch (e) {
+		cli.err(true,`The server could not be initiated:\n\n${e}`);
+	}
 }
-catch (e) { throw e; }
+else {
+	cli.err(true,'You cannot initiate the server without executing configure first!',`Set your current working directory to the root directory of this project, and run the following:\n\n${'./configure'.bold}\n\nAfter that, you can initiate the server.`);
+}
