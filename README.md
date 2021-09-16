@@ -18,13 +18,13 @@ Schedule is easy to use, has a nice and straightforward GUI and works seamlessly
 	</tr>
 	<tr>
 		<td>
-			<ol start="1">
+			<ol>
 				<li><a href="#notice">Notice</a></li>
 				<li><a href="#prerequisites">Prerequisites</a></li>
-				<ol start="1">
+				<ol>
 					<li><a href="#nodejs-installation">Node.js Installation</a></li>
 					<li><a href="#npm-modules">Npm Modules</a></li>
-					<ol start="1">
+					<ol>
 						<li><a href="#nodemon-installation">Nodemon Installation</a></li>
 						<li><a href="#sass-installation">Sass Installation</a></li>
 						<li><a href="#coffeescript-installation">CoffeeScript Installation</a></li>
@@ -34,7 +34,7 @@ Schedule is easy to use, has a nice and straightforward GUI and works seamlessly
 				</ol>
 				<li><a href="#repository-cloning">Repository Cloning</a></li>
 				<li><a href="#server">Server</a></li>
-				<ol start="1">
+				<ol>
 					<li><a href="#ssl-certificate-and-pwa">SSL Certificate (And PWA)</a></li>
 					<li><a href="#server-initiation">Server Initiation</a></li>
 					<li><a href="#server-configuration">Server Configuration</a></li>
@@ -52,7 +52,7 @@ Schedule is easy to use, has a nice and straightforward GUI and works seamlessly
 
 Schedule is an open source project licensed under the [GNU General Public License version 3.0](https://www.gnu.org/licenses/gpl-3.0.html). To see what you may and may not do with the source code of this project, see the [license](https://github.com/msfninja/schedule/blob/main/LICENSE). The license can also be found in the root directory of the project as `LICENSE`.
 
-Schedule is open source because 1) this way users can see how the thing works and what it does for themselves, 2) other developers can utilize the code and 3) I believe in open source, and it defines my<sup id="l-ref-4"><a href="#ref-4">4</a></sup> fundamental understandings of how things should be, what is right and what is unjust.
+Schedule is open source because 1) this way users can see how the thing works and what it does for themselves, 2) other developers can utilize the code and 3) I<sup id="l-ref-4"><a href="#ref-4">4</a></sup> believe in open source, and it defines my fundamental understandings of how things should be, what is right and what is unjust.
 
 As a sidenote, I personally do not manage or work on any projects that are explicitly proprietary or portray the ideology of proprietary software.
 
@@ -66,19 +66,19 @@ If you want to host Schedule yourself on your server, you'd need several items p
 
 Frist of, you'll need [Node.js](https://nodejs.org/en/). Schedule basically boils down to a node app, so to run the app, you need Node.js. You can download an installer or the source code from their [official website](https://nodejs.org/en/download/), or run these commands in your shell:
 
-**Ubuntu/Debian**
+**Ubuntu/Debian:**
 
 ```bash
 sudo apt -y install nodejs
 ```
 
-**Fedora**
+**Fedora:**
 
 ```bash
 sudo dnf install nodejs
 ```
 
-**RedHat/CentOS**
+**RedHat/CentOS:**
 
 ```bash
 sudo yum -y install nodejs
@@ -96,7 +96,7 @@ If this returns an error, or doesn't output anything, it means that either Node.
 
 ### Npm Modules
 
-Apart from Node.js, this node app requires several modules to operate properly which do not come preinstalled with Node.js by default. The modules `ip`, `yaml`, `uuid` and `colors` are required for Schedule to work, and other utilities like `nodemon` come in handy, but are optional. Further on there is also Sass and CoffeeScript, but you would only need those if you are planning on modifying any of the files `.sass` or `.coffee` files (presuming you are going to compile the code).
+Apart from Node.js, this node app requires several modules to operate properly which do not come preinstalled with Node.js by default. The modules `ip`, `yaml`, `uuid` and `colors` are required for Schedule to work, and other utilities like `nodemon` come in handy, but are optional. Further on there is also Sass and CoffeeScript, but you would only need those if you are planning on modifying any of the files `.sass` or `.coffee` files (presuming you are going to compile the code as well to reflect the changes).
 
 #### Nodemon Installation
 
@@ -146,12 +146,14 @@ coffee --version
 
 #### Other Modules
 
+**Important: you should locally clone Schedule's repository before proceeding with this section, as you need a place to install the npm modules to. Please follow [this part](#repository-cloning) first, and then proceed with installing the mandatory npm modules.**
+
 As mentioned [earlier](#npm-modules), the `ip`, `yaml`, `uuid` and `colors` modules do not come preinstalled with Node.js by default. This means, for Schedule to work properly, you have to install them manually using npm.
 
-You can issue the following command in your shell that will install them all:
+You can issue the following command in your shell that will install them all (by default I have the `node_modules` directory inside the `server` directory, hence the `cd server` (assuming you are in the working directory to which you cloned Schedule's repository to (from [this section](#repository-cloning))) before the actual installation of the npm modules):
 
 ```bash
-npm i ip yaml uuid colors
+cd server; npm i ip yaml uuid colors
 ```
 
 A brief description of what every module is used for:
@@ -167,8 +169,22 @@ To clone Schedule's repository to your machine and use it, you need git. Althoug
 
 If you don't have git, you can install it by running the following commands in your shell:
 
+**Ubuntu/Debian:**
+
 ```bash
-sudo apt-get update && sudo apt-get install -y git
+sudo apt -y install git
+```
+
+**Fedora:**
+
+```bash
+sudo dnf install git
+```
+
+**RedHat/CentOS:**
+
+```bash
+sudo yum -y install git
 ```
 
 Git's version or presence on the machine can be checked by running the following in your shell:
@@ -179,7 +195,7 @@ git --version
 
 ## Repository Cloning
 
-Before cloning, make sure you are in your desired working directory (in your shell). If you want to clone Schedule to the your home directory, issue the following to change your current working directory to your home directory in your shell:
+Before you start cloning using git, make sure you have git present on your machine. If you don't have git, proceed with [this section](#git-installation) first. Otherwise, make sure you are in your desired working directory (in your shell). If you want to clone Schedule to the your home directory, issue the following to change your current working directory to your home directory in your shell:
 
 ```bash
 cd ~
@@ -203,13 +219,48 @@ Or you can simply try to go to the cloned directory by running the following in 
 cd schedule
 ```
 
+After successfully cloning Schedule's repository to your machine, you can proceed with installing other necessary npm modules [here](#other-modules).
+
 ## Server
 
-Before you can go and run the `server/server.js` file, you have to do a few things. Schedule has several features which require its traffic to go over HTTPS, rather than HTTP. First of, passwords and other sensitive information is being transferred, 
+Before you can go and run the `server/server.js` file, you have to do a few things. Schedule has several features which require its traffic to go over HTTPS, rather than HTTP. First of, passwords and other sensitive information are being transferred. Also, schedule offers a PWA functionality, which requires HTTPS traffic.
 
 ### SSL Certificate (And PWA)
 
+If you have an SSL certificate, put it and the rest that belongs to it into the `server/ssl` directory, and rename the key files to `key.pem`, and the certificate to `cert.pem`.
+
+To generate a self-signed SSL certificate using `openssl`, go to the `server/ssl` directory:
+
+```bash
+cd server/ssl
+```
+
+And run the following commands in your shell:
+
+```bash
+openssl genrsa -out key.pem
+openssl req -new -key key.pem -out csr.pem
+openssl x509 -req -days 9999 -in csr.pem -signkey key.pem -out cert.pem
+rm csr.pem
+```
+
+This will leave you with two files: `cert.pem` and `key.pem` (inside the `server/ssl` directory). That is all you need to do. The server file will utilize these files.
+
 ### Server Initiation
+
+Now that you're ready, you can initialize the server. Go to the `server` directory:
+
+```bash
+cd server
+```
+
+And initiate the node server by running this command in your shell:
+
+```bash
+nodemon server.js --ignore '*.json'
+```
+
+The `--ignore` flag is set to `'*.json'` so the server won't reinitiate every time there is a change to any JSON file within the project directory.
 
 ### Server Configuration
 
