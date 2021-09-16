@@ -4,9 +4,9 @@ app:
   lname: "Shcedule PWA"
   title: "A To-dos, Notes And More App"
   desc: "Schedule lets you save to-dos, notes, school timetables and more."
-  version: "0.0.0"
+  version: ""
   release:
-    tag: "0.0.0-alpha"
+    tag: "Unreleased"
 server:
   port: 150
   root:
