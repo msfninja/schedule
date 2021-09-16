@@ -147,7 +147,7 @@ coffee --version
 
 #### Other Modules
 
-**Important: you should locally clone Schedule's repository before proceeding with this section, as you need a place to install the npm modules to. Please follow [this part](#repository-cloning) first, and then proceed with installing the mandatory npm modules.**
+**Important: you should locally clone Schedule's repository before proceeding with this section, as you need a place to install the npm modules to. Follow [this section](#repository-cloning) first, and then proceed with installing the mandatory npm modules.**
 
 As mentioned [earlier](#npm-modules), the `ip`, `yaml`, `uuid` and `colors` modules do not come preinstalled with Node.js by default. This means, for Schedule to work properly, you have to install them manually using npm.
 
@@ -226,25 +226,23 @@ After successfully cloning Schedule's repository to your machine, you can procee
 
 Before you can actually run the server (`server/server.js` file), you need to run the `configure` file to set the project up.
 
-To run configure, change your current working directory to the project's root directory, and run the following in your shell:
+To run `configure`, change your current working directory to the project's root directory, and run the following in your shell:
 
 ```bash
 ./configure
 ```
 
-This will create the `schedule` directory in your home directory with additional directories that will later store user data.
+This will create the `schedule` directory in your home directory with additional directories that will later store user data, root account data, various authentication data and public data to be displayed in the web client of Schedule.
 
-**Important: make sure you will be running the node server as the same user as you were running the `configure` file, otherwise the server won't run properly by reading a different home directory than the `configure` file created the `schedule` directory in.**
+**Important: make sure you will be running the node server as the same user you were running the `configure` file, otherwise the server won't run properly by reading a different home directory than the `configure` file created the `schedule` directory in.**
 
 ## Server
 
-**Important: before you can run the server, you need to run the `configure` file. Otherwise the node app will exit with an error. Go to [this section](#initial-configuration) to get started with the `configure` file.**
-
-There are more things to do before running the `server/server.js` file. Schedule has several features which require its traffic to go over HTTPS, rather than HTTP. First of, passwords and other sensitive information are being transferred. Also, schedule offers a PWA functionality, which requires HTTPS traffic.
+There are more things to do before running the `server/server.js` file. Schedule has several features which require its traffic to go over HTTPS, rather than HTTP. First of, passwords and other sensitive information are being transmitted. Also, schedule offers a PWA functionality, which requires HTTPS traffic.
 
 ### SSL Certificate (And PWA)
 
-If you have an SSL certificate, put it and the rest that belongs to it into the `server/ssl` directory, and rename the key files to `key.pem`, and the certificate to `cert.pem`.
+If you have an SSL certificate, put it and the rest that belongs to it into the `server/ssl` directory, and rename the key file to `key.pem`, and the certificate file to `cert.pem`.
 
 To generate a self-signed SSL certificate using `openssl`, go to the `server/ssl` directory:
 
@@ -265,7 +263,9 @@ This will leave you with two files: `cert.pem` and `key.pem` (inside the `server
 
 ### Server Initiation
 
-Now that you're ready, you can initialize the server. Go to the `server` directory:
+**Important: before you can run the server, you need to run the `configure` file. Otherwise the node app will exit with an error. Go to [this section](#initial-configuration) to get started with the `configure` file.**
+
+If you're ready, you can initialize the server. Go to the `server` directory:
 
 ```bash
 cd server
