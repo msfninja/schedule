@@ -221,9 +221,21 @@ cd schedule
 
 After successfully cloning Schedule's repository to your machine, you can proceed with installing other necessary npm modules [here](#other-modules).
 
+## Initial Configuration
+
+Before you can actually run the server (`server/server.js` file), you need to run the `configure` file to set the project up.
+
+To run configure, change your current working directory to the project's root directory, and run the following in your shell:
+
+```bash
+./configure
+```
+
 ## Server
 
-Before you can go and run the `server/server.js` file, you have to do a few things. Schedule has several features which require its traffic to go over HTTPS, rather than HTTP. First of, passwords and other sensitive information are being transferred. Also, schedule offers a PWA functionality, which requires HTTPS traffic.
+**Important: before you can run the server, you need to run the `configure` file. Otherwise the node app will exit with an error. Go to [this section](#initial-configuration) to get started with the `configure` file.**
+
+There are more things to do before running the `server/server.js` file. Schedule has several features which require its traffic to go over HTTPS, rather than HTTP. First of, passwords and other sensitive information are being transferred. Also, schedule offers a PWA functionality, which requires HTTPS traffic.
 
 ### SSL Certificate (And PWA)
 
