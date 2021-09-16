@@ -33,6 +33,7 @@ Schedule is easy to use, has a nice and straightforward GUI and works seamlessly
 					<li><a href="#git-installation">Git Installation</a></li>
 				</ol>
 				<li><a href="#repository-cloning">Repository Cloning</a></li>
+				<li><a href="#initial-configuration">Initial Configuration</a></li>
 				<li><a href="#server">Server</a></li>
 				<ol>
 					<li><a href="#ssl-certificate-and-pwa">SSL Certificate (And PWA)</a></li>
@@ -231,6 +232,10 @@ To run configure, change your current working directory to the project's root di
 ./configure
 ```
 
+This will create the `schedule` directory in your home directory with additional directories that will later store user data.
+
+**Important: make sure you will be running the node server as the same user as you were running the `configure` file, otherwise the server won't run properly by reading a different home directory than the `configure` file created the `schedule` directory in.**
+
 ## Server
 
 **Important: before you can run the server, you need to run the `configure` file. Otherwise the node app will exit with an error. Go to [this section](#initial-configuration) to get started with the `configure` file.**
@@ -276,9 +281,54 @@ The `--ignore` flag is set to `'*.json'` so the server won't reinitiate every ti
 
 ### Server Configuration
 
+Server configuration is not very broad, but present nevertheless. Common hand-picked values that are used throughout the `server/server.js` file are collected in the `config.yml` file in the root directory of the project. If you need to change something miscellaneous, you can try to find the property there.
+
+For example, if you'd like to change the port, you can search for these lines:
+
+```yaml
+server:
+  port: 150
+```
+
+Where assumably the default number 150 represents the port. Changing this to a value that is not a valid TCP/UDP port will result in an error upon initiating the server.
+
 ### Compiling Sass Code
 
+Make sure you have Sass installed before proceeding with this section. To see how to install Sass, follow [this section](#sass-installation) first.
+
+So far, Schedule has only 1 Sass style sheet. To compile it into CSS code that is being served to the client, run the below command in your shell (assuming your current working directory is the project's root directory):
+
+```bash
+sass ./server/client/sass/stylesheet.sass ./public/client/css/stylesheet.css
+```
+
+This will compile the code only once though. If you want to automate the compilation process, you can add the `-w` option like this:
+
+```bash
+sass -w ./server/client/sass/stylesheet.sass ./public/client/stylesheet.css
+```
+
+By default, sass will also make a source map along the compiled CSS style sheet. If you don't want a source map, you can add the `--no-source-map` option.
+
 ### Compiling CoffeeScript Code
+
+Make sure you have CoffeeScript installed before proceeding with this section. To see how to install CoffeeScript, follow [this section](#coffeescript-installation) first.
+
+Schedule has 2 CoffeeScript scripts, which are `server/client/coffee/main.coffee` and `server/client/coffee/user.coffee`. Both can be compiled into JavaScript code that will be served to the client issuing the following two commands in your shell respectively:
+
+```bash
+coffee -o ./public/client/js/main.js -c ./server/client/coffee/main.coffee
+```
+
+```bash
+coffee -o ./public/client/js/user.js -c ./server/client/coffee/user.coffee
+```
+
+If you want to compile the CoffeeScript code on every change to the `.coffee` files, you can change the `-c` option to `-w`, for example like this:
+
+```bash
+coffee -o ./public/client/js/main.js -w ./server/client/coffee/main.coffee
+```
 
 ## Support
 
