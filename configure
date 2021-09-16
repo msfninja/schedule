@@ -1,0 +1,4 @@
+mkdir -p ~/schedule/usr
+mkdir -p ~/schedule/public
+mkdir -p ~/schedule/root
+echo true > server/init
