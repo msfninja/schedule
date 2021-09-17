@@ -53,9 +53,7 @@ Schedule is easy to use, has a nice and straightforward GUI and works seamlessly
 
 Schedule is an open source project licensed under the [GNU General Public License version 3.0](https://www.gnu.org/licenses/gpl-3.0.html). To see what you may and may not do with the source code of this project, see the [license](https://github.com/msfninja/schedule/blob/main/LICENSE). The license can also be found in the root directory of the project as `LICENSE`.
 
-Schedule is open source because 1) this way users can see how the thing works and what it does for themselves, 2) other developers can utilize the code and 3) I<sup id="l-ref-4"><a href="#ref-4">4</a></sup> believe in open source, and it defines my fundamental understandings of how things should be, what is right and what is unjust.
-
-As a sidenote, I personally do not manage or work on any projects that are explicitly proprietary or portray the ideology of proprietary software.
+Schedule is open source because 1) this way users can see how the thing works and what it does for themselves and 2) other developers can utilize the code.
 
 This `README.md` file will be assuming you are using a Linux distribution, so when encountering commands or other system-related things and using an operating system other than Linux or a Linux distribution that is not featured, make sure you use your system's equivalent variant or way of achieving the result.
 
@@ -343,7 +341,5 @@ You can always report issues and create pull requests on Schedule's [GitHub repo
 <span id="ref-2">2.</span> <b><a title="Jump up" href="#l-ref-2">^</a></b> If you install Schedule as a PWA on your device, you will be accessing it from an imitated app, but technically still a browser.
 
 <span id="ref-3">3.</span> <b><a title="Jump up" href="#l-ref-3">^</a></b> User account data (that is saved in the long term by the server unless a user request to delete the data is presented) includes but is not limited to the following: username (this is **not** kept encrypted however, otherwise there would be no way to identify users with Schedule's current design); user password; user to-dos; user notes; and user calendar events.
-
-<span id="ref-4">4.</span> <b><a title="Jump up" href="#l-ref-4">^</a></b> When I'm referring to myself throughout this file and project, I'm referring to me as to msfninja.
 
 <span id="ref-5">5.</span> <b><a title="Jump up" href="#l-ref-5">^</a></b> If you need a different configuration for an npm package/module installation, you can run `npm i --help` to get a list of possible options to be used.
