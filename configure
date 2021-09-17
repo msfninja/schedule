@@ -2,7 +2,7 @@
 
 mkdir -p ~/schedule-data/auth/root
 mkdir -p ~/schedule-data/auth/usr
-mkdir -p ~/schedule-data/public
+mkdir -p ~/schedule-data/public/school
 mkdir -p ~/schedule-data/usr
 mkdir -p ~/schedule-data/root
 
