@@ -238,7 +238,7 @@ This will create the `schedule-data` directory in your current user home directo
 
 ## Server
 
-There are more things to do before running the `server/server.js` file. Schedule has several features which require its traffic to go over HTTPS, rather than HTTP. First of, passwords and other sensitive information are being transmitted. Also, schedule offers a PWA functionality, which requires HTTPS traffic.
+There are a few more things you have to do before running the `server/server.js` file. Schedule has several features which require its traffic to go over HTTPS, rather than HTTP. First of, passwords and other sensitive information are being transmitted between the client and the server. Additionally, Schedule offers a PWA functionality, which by the majority of browsers I know has a requirement of its traffic to be transmitted over HTTPS.
 
 ### SSL Certificate (And PWA)
 
