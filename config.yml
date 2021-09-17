@@ -16,7 +16,7 @@ server:
     session:
       time: 604800
   security:
-    token_length: 3
-    recover_token_length: 3
+    token_length: 96
+    recover_token_length: 96
 cli:
   name: "schedule"
