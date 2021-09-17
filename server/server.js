@@ -1,12 +1,10 @@
-// Schedule node app server source code. This
-// file was written by msfninja
-// <msfninja@airmail.cc>.
+// Schedule node app server source code. This file was
+// written by msfninja <msfninja@airmail.cc>.
 //
 // See the Schedule wiki
-// (https://github.com/msfninja/schedule/wiki)
-// for documentation on how this file works,
-// how to use it and how to modify it in a proper
-// way.
+// (https://github.com/msfninja/schedule/wiki) for
+// documentation on how this file works, how to use it
+// and how to modify it in a proper way.
 //
 // (c) 2021 Schedule
 
@@ -33,8 +31,10 @@ const // cli object constructor (global scope)
 
 const // repo
 	repo = {
-		url: 'https://github.com/msfninja/schedule',
-		blob: 'https://github.com/msfninja/schedule/blob/main'
+		gh: {
+			url: 'https://github.com/msfninja/schedule',
+			blob: 'https://github.com/msfninja/schedule/blob/main'
+		}
 	}
 
 const // dirs
@@ -77,7 +77,7 @@ try {
 	if (!config) throw new Error('The config.yml file seems to be incorrectly configured.');
 }
 catch (e) {
-	cli.err(true,e.message,`Download the proper config.yml file from the repository:\n\n${repo.blob}/config.yml`);
+	cli.err(true,e.message,`Download the proper config.yml file from the repository:\n\n${repo.gh.blob}/config.yml`);
 }
 
 const // app functions
@@ -227,19 +227,13 @@ function User(res,req) { // user function
 				`${h}/cnt/to-dos`
 			];
 		arr.forEach(e => {
-			console.log(`pending: ${e}`);
 			fs.mkdir(e,{ recursive: true },err => {
 				if (err) throw err;
-				console.log(`created: ${e}`);
 			});
 		});
 		fs.writeFile(`${h}/data.json`,JSON.stringify(obj),err => {
-			if (err) throw err;
-			res.writeHead(200,{'Content-Type':'text/plain'});
-			res.write('hello');
-			res.end();
-			//term(res,500,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/client/err/500.xhtml`,'r'));
-			// utokens.create(o.usr,true);
+			if (err) term(res,500,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/client/err/500.xhtml`,'r'));
+			utokens.create(o.usr,true);
 		});
 	};
 	this.verify = a => { // verify user credentials or token
