@@ -41,7 +41,7 @@ const // dirs
 	dir = path.resolve(__dirname,'..'),
 	dirs = {
 		usr: os.homedir(),
-		dat: path.join(os.homedir(),'schedule')
+		dat: path.join(os.homedir(),'schedule-data')
 	};
 
 const // ssl
@@ -222,18 +222,24 @@ function User(res,req) { // user function
 				psw: encrypt(o.psw,`${o.psw}${guid()}`.substr(0,32))
 			},
 			arr = [
-				`${h}/content/calendar`,
-				`${h}/content/notes`,
-				`${h}/content/to-dos`
+				`${h}/cnt/calendar`,
+				`${h}/cnt/notes`,
+				`${h}/cnt/to-dos`
 			];
 		arr.forEach(e => {
+			console.log(`pending: ${e}`);
 			fs.mkdir(e,{ recursive: true },err => {
 				if (err) throw err;
+				console.log(`created: ${e}`);
 			});
 		});
 		fs.writeFile(`${h}/data.json`,JSON.stringify(obj),err => {
-			if (err) term(res,500,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/client/err/500.xhtml`,'r'));
-			utokens.create(o.usr,true);
+			if (err) throw err;
+			res.writeHead(200,{'Content-Type':'text/plain'});
+			res.write('hello');
+			res.end();
+			//term(res,500,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/client/err/500.xhtml`,'r'));
+			// utokens.create(o.usr,true);
 		});
 	};
 	this.verify = a => { // verify user credentials or token
@@ -313,7 +319,7 @@ function UTokens(res) { // user tokens function
 		fs.writeFile(`${dirs.dat}/auth/usr/tokens.json`,JSON.stringify(arr),err => {
 			if (err) term(res,500,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/client/err/500.xhtml`,'r'));
 		});
-		obj = JSON.parse(rd(`${dirs.dat}/dat/usr/${u}/data.json`));
+		obj = JSON.parse(rd(`${dirs.dat}/usr/${u}/data.json`));
 		obj.utoken = token;
 		fs.writeFile(`${dirs.dat}/usr/${u}/data.json`,JSON.stringify(obj),err => {
 			if (err) term(res,500,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/client/err/500.xhtml`,'r'));
@@ -477,15 +483,15 @@ const // security
 		for (var i = 0; i < n; i++) str += uuidv4().toString().replace(/\-/g,'');
 		return str;
 	},
-	token = getuuid(config.server.security.token_length),
-	recover = getuuid(config.server.security.recover_token_length);
+	token = getuuid(Math.ceil(config.server.security.token_length / 32)),
+	recover = getuuid(Math.ceil(config.server.security.recover_token_length / 32));
 
 const // auth
 	keys = t => {
-		let h = `${dirs.dat}/auth/root/dat/keys.hash`;
+		let h = `${dirs.dat}/auth/root/keys.hash`;
 		if (ex(h)) {
 			try {
-				return JSON.parse(rd(`${dirs.dat}/auth/root/dat/keys.hash`))[t];
+				return JSON.parse(rd(`${dirs.dat}/auth/root/keys.hash`))[t];
 			}
 			catch (e) {
 				cli.err(true,`There was an error retrieving root account credentials:\n\n${e}`);
@@ -504,7 +510,7 @@ const // auth
 		return str;
 	};
 
-if (rd(`${dir}/server/init`)) {
+if (rd(`${dirs.usr}/schedule/init`)) {
 	try {
 		start(config.server.port);
 		cli.clear();
