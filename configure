@@ -1,9 +1,9 @@
 #! /bin/bash
 
-mkdir -p ~/schedule/auth/root
-mkdir -p ~/schedule/auth/usr
-mkdir -p ~/schedule/public
-mkdir -p ~/schedule/usr
-mkdir -p ~/schedule/root
+mkdir -p ~/schedule-data/auth/root
+mkdir -p ~/schedule-data/auth/usr
+mkdir -p ~/schedule-data/public
+mkdir -p ~/schedule-data/usr
+mkdir -p ~/schedule-data/root
 
-echo true > ~/schedule/init
+echo true > ~/schedule-data/init
