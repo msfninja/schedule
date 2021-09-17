@@ -36,7 +36,7 @@ Schedule is easy to use, has a nice and straightforward GUI and works seamlessly
 				<li><a href="#initial-configuration">Initial Configuration</a></li>
 				<li><a href="#server">Server</a></li>
 				<ol>
-					<li><a href="#ssl-certificate-and-pwa">SSL Certificate (And PWA)</a></li>
+					<li><a href="#ssl-certificate">SSL Certificate</a></li>
 					<li><a href="#server-initiation">Server Initiation</a></li>
 					<li><a href="#server-configuration">Server Configuration</a></li>
 					<li><a href="#compiling-sass-code">Compiling Sass Code</a></li>
@@ -240,7 +240,7 @@ This will create the `schedule-data` directory in your current user home directo
 
 There are a few more things you have to do before running the `server/server.js` file. Schedule has several features which require its traffic to go over HTTPS, rather than HTTP. First of, passwords and other sensitive information are being transmitted between the client and the server. Additionally, Schedule offers a PWA functionality, which by the majority of browsers I know has a requirement of its traffic to be transmitted over HTTPS.
 
-### SSL Certificate (And PWA)
+### SSL Certificate
 
 If you have an SSL certificate, put it and the rest that belongs to it into the `server/ssl` directory, and rename the key file to `key.pem`, and the certificate file to `cert.pem`.
 
@@ -265,7 +265,7 @@ This will leave you with two files: `cert.pem` and `key.pem` (inside the `server
 
 **Important: before you can run the server, you need to run the `configure` file. Otherwise the node app will exit with an error. Go to [this section](#initial-configuration) to get started with the `configure` file.**
 
-If you're ready, you can initialize the server. Go to the `server` directory:
+If you've run the `configure` file and ready to go, you can initialize the server. Go to the `server` directory:
 
 ```bash
 cd server
@@ -290,13 +290,13 @@ server:
   port: 150
 ```
 
-Where assumably the default number 150 represents the port. Changing this to a value that is not a valid TCP/UDP port will result in an error upon initiating the server.
+Where presumably the default number 150 represents the port. Changing this to a value that is not a valid TCP/UDP port will result in an error upon initiating the server.
 
 ### Compiling Sass Code
 
 Make sure you have Sass installed before proceeding with this section. To see how to install Sass, follow [this section](#sass-installation) first.
 
-So far, Schedule has only one Sass style sheet. To compile it into CSS code that is being served to the client, run the below command in your shell (assuming your current working directory is the project's root directory):
+So far, Schedule has only one Sass style sheet. To compile it into CSS code that will be served to the client, run the below command in your shell (assuming your current working directory is the project's root directory):
 
 ```bash
 sass ./server/client/sass/stylesheet.sass ./public/client/css/stylesheet.css
@@ -314,7 +314,7 @@ By default, sass will also make a source map along the compiled CSS style sheet.
 
 Make sure you have CoffeeScript installed before proceeding with this section. To see how to install CoffeeScript, follow [this section](#coffeescript-installation) first.
 
-Schedule has 2 CoffeeScript scripts, which are `server/client/coffee/main.coffee` and `server/client/coffee/user.coffee`. Both can be compiled into JavaScript code that will be served to the client issuing the following two commands in your shell respectively:
+Schedule has 2 CoffeeScript scripts, which are `server/client/coffee/main.coffee` and `server/client/coffee/user.coffee`. Both can be compiled into JavaScript code that will be served to the client issuing the following two commands for both scripts in your shell respectively:
 
 ```bash
 coffee -o ./public/client/js/main.js -c ./server/client/coffee/main.coffee
@@ -324,7 +324,7 @@ coffee -o ./public/client/js/main.js -c ./server/client/coffee/main.coffee
 coffee -o ./public/client/js/user.js -c ./server/client/coffee/user.coffee
 ```
 
-If you want to compile the CoffeeScript code on every change to the `.coffee` files, you can change the `-c` option to `-w`, for example like this:
+If you want to compile the CoffeeScript code on every change to the `.coffee` files, you can change the `-c` option to `-w`, for example, like this:
 
 ```bash
 coffee -o ./public/client/js/main.js -w ./server/client/coffee/main.coffee
