@@ -471,11 +471,11 @@ function Notes(res) { // notes management
 }
 
 function Calendar(res) { // calendar management
-	//
+	// to be done
 }
 
 function School(res) { // schools/timetables management
-	//
+	// to be done
 }
 
 const // https server
