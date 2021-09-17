@@ -510,7 +510,7 @@ const // auth
 		return str;
 	};
 
-if (rd(`${dirs.usr}/schedule/init`)) {
+if (rd(`${dirs.usr}/schedule-data/init`)) {
 	try {
 		start(config.server.port);
 		cli.clear();
