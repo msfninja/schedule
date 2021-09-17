@@ -1,4 +1,9 @@
-mkdir -p ~/schedule/usr
+#! /bin/bash
+
+mkdir -p ~/schedule/auth/root
+mkdir -p ~/schedule/auth/usr
 mkdir -p ~/schedule/public
+mkdir -p ~/schedule/usr
 mkdir -p ~/schedule/root
-echo true > server/init
+
+echo true > ~/schedule/init
