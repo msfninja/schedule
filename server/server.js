@@ -471,11 +471,11 @@ function Notes(res) { // notes management
 }
 
 function Calendar(res) { // calendar management
-	// to be done
+	//
 }
 
-function School(res) { // schools/timetables management
-	// to be done
+function School() { // schools/timetables management
+	//
 }
 
 const // https server
@@ -493,7 +493,7 @@ const // https server
 				todos = new Todos(res),
 				notes = new Notes(res),
 				calendar = new Calendar(res),
-				school = new School(res);
+				school = new School();
 
 			if (p === '/') {
 				if (user.verify(cookie['UTOKEN'])) {
