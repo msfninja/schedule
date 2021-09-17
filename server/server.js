@@ -124,7 +124,8 @@ const // site functions
 	createNav = c => {
 		let
 			html = '',
-			navdat = YAML.parse(rd(`${dir}/nav.yml`));
+			navdat = YAML.parse(rd(`${dir}/nav.yml`)).nav;
+
 		navdat.forEach(e => {
 			if (c) {
 				if (e.nav) {
@@ -158,12 +159,14 @@ function CLI() {
 	this.log = s => {
 		console.log(`${config.cli.name.blue.bold}> ${s}`);
 	};
+
 	this.err = (t,e,s) => {
 		console.clear();
 		console.error(`${'\nERROR:'.red.bold}\n\n${e}\n`);
 		if (s) console.log(`${'SOLUTION:'.blue.bold}\n\n${s}\n`);
 		if (t) process.exit(1);
 	};
+
 	this.clear = () => {
 		console.clear();
 	};
@@ -183,6 +186,7 @@ function Root(res,req) { // root function
 		}
 		return false;
 	};
+
 	this.login = c => { // login for root
 		if (c) {
 			term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/root/panel/index.xhtml`,'arx'));
@@ -191,6 +195,7 @@ function Root(res,req) { // root function
 			term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/root/index.xhtml`,'ar'));
 		}
 	};
+
 	this.cred = (t,a) => { // credentials recovery
 		if (t === 'set') {
 			let obj = {};
@@ -205,9 +210,11 @@ function Root(res,req) { // root function
 
 function RTokens(res) { // root tokens function
 	this.create = () => {};
+
 	this.verify = t => {
 		return false;
 	};
+
 	this.delete = t => {};
 }
 
@@ -226,16 +233,24 @@ function User(res,req) { // user function
 				`${h}/cnt/notes`,
 				`${h}/cnt/to-dos`
 			];
+
+		try {
+			fs.accessSync(`${dirs.dat}/usr`,fs.constants.R_OK | fs.constants.W_OK);
+		}
+		catch (e) {
+			fs.chmodSync(`${dirs.dat}/usr`,0o724);
+		}
+
 		arr.forEach(e => {
-			fs.mkdir(e,{ recursive: true },err => {
-				if (err) throw err;
-			});
+			fs.mkdirSync(e,{ recursive: true });
 		});
+
 		fs.writeFile(`${h}/data.json`,JSON.stringify(obj),err => {
-			if (err) term(res,500,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/client/err/500.xhtml`,'r'));
+			if (err) throw err;
 			utokens.create(o.usr,true);
 		});
 	};
+
 	this.verify = a => { // verify user credentials or token
 		if (a) {
 			if (Object.prototype.toString.call(a) === '[object Array]') {
@@ -254,6 +269,7 @@ function User(res,req) { // user function
 		}
 		return false;
 	};
+
 	this.login = c => { // login for user
 		if (c) {
 			term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/app/index.xhtml`,'ru'));
@@ -262,10 +278,12 @@ function User(res,req) { // user function
 			term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/public/index.xhtml`,'r'));
 		}
 	};
+
 	this.check = u => { // check if user exists
 		let usr = fs.readdirSync(`${dirs.dat}/usr`).find(e => e === u);
 		return usr ? true : false;
 	};
+
 	this.request = (t,r) => { // request user data by username or token
 		let usr = fs.readdirSync(`${dirs.dat}/usr`);
 		if (usr) {
@@ -292,11 +310,14 @@ function UTokens(res) { // user tokens function
 	try {
 		utokens = JSON.parse(rd(`${dirs.dat}/auth/usr/tokens.json`));
 	}
-	catch (e) { utokens = false; }
+	catch (e) {
+		utokens = false;
+	}
 
 	this.get = () => { // get array of user tokens
 		return utokens;
 	};
+
 	this.create = (u,c) => { // create user token
 		let
 			time = new Date().valueOf(),
@@ -320,6 +341,7 @@ function UTokens(res) { // user tokens function
 		});
 		if (c) term(res,302,{'Set-Cookie':`UTOKEN=${token}; Path=/;`,'Location':'/usr'});
 	};
+
 	this.verify = t => { // verify user token
 		if (utokens) {
 			let tkn = utokens.find(e => e.tkn === t);
@@ -327,6 +349,7 @@ function UTokens(res) { // user tokens function
 		}
 		return false;
 	};
+
 	this.delete = (t,c,d) => { // delete user token from tokens.json and/or user data
 		if (utokens) {
 			let
@@ -355,6 +378,106 @@ function UTokens(res) { // user tokens function
 	};
 }
 
+function Todos(res) { // to-dos management
+	let user = new User(res);
+
+	this.add = (t,o) => {
+		if (user.verify(t)) {
+			let
+				dt = new Date(),
+				u = user.request('tkn',t);
+
+			fs.writeFile(`${dirs.dat}/usr/${u.usr}/cnt/to-dos/${dt.getFullYear()}${dt.getMonth()}${dt.getDate()}${dt.getHours()}${dt.getMinutes()}${dt.getSeconds()}.json`,JSON.stringify(o),err => {
+				if (err) throw err;
+			});
+		}
+	};
+
+	this.get = t => {
+		if (user.verify(t)) {
+			let
+				arr = [],
+				u = user.request('tkn',t);
+
+			fs.readdirSync(`${dirs.dat}/usr/${u.usr}/cnt/to-dos`).forEach(e => {
+				let todo = JSON.parse(rd(`${dirs.dat}/usr/${u.usr}/cnt/to-dos/${e}`));
+				todo.id = e;
+				arr.push(todo);
+			});
+
+			return arr;
+		}
+	};
+
+	this.delete = (t,i) => {
+		if (user.verify(t)) {
+			let
+				u = user.request('tkn',t),
+				target = fs.readdirSync(`${dirs.dat}/usr/${u.usr}/cnt/to-dos`).find(e => e === i);
+
+			if (target) {
+				fs.unlink(`${dirs.dat}/usr/${u.usr}/cnt/to-dos/${target}`,err => {
+					if (err) throw err;
+				})
+			}
+		}
+	};
+}
+
+function Notes(res) { // notes management
+	let user = new User(res);
+
+	this.add = (t,o) => {
+		if (user.verify(t)) {
+			let
+				dt = new Date(),
+				u = user.request('tkn',t);
+
+			fs.writeFile(`${dirs.dat}/usr/${u.usr}/cnt/notes/${dt.getFullYear()}${dt.getMonth()}${dt.getDate()}${dt.getHours()}${dt.getMinutes()}${dt.getSeconds()}.json`,JSON.stringify(o),err => {
+				if (err) throw err;
+			});
+		}
+	};
+
+	this.get = t => {
+		if (user.verify(t)) {
+			let
+				arr = [],
+				u = user.request('tkn',t);
+
+			fs.readdirSync(`${dirs.dat}/usr/${u.usr}/cnt/notes`).forEach(e => {
+				let todo = JSON.parse(rd(`${dirs.dat}/usr/${u.usr}/cnt/notes/${e}`));
+				todo.id = e;
+				arr.push(todo);
+			});
+
+			return arr;
+		}
+	};
+
+	this.delete = (t,i) => {
+		if (user.verify(t)) {
+			let
+				u = user.request('tkn',t),
+				target = fs.readdirSync(`${dirs.dat}/usr/${u.usr}/cnt/notes`).find(e => e === i);
+
+			if (target) {
+				fs.unlink(`${dirs.dat}/usr/${u.usr}/cnt/notes/${target}`,err => {
+					if (err) throw err;
+				})
+			}
+		}
+	};
+}
+
+function Calendar(res) { // calendar management
+	//
+}
+
+function School(res) { // schools/timetables management
+	//
+}
+
 const // https server
 	start = port => {
 		https.createServer(opt,(req,res) => {
@@ -366,7 +489,11 @@ const // https server
 				root = new Root(res,req),
 				rtokens = new RTokens(res),
 				user = new User(res,req),
-				utokens = new UTokens(res);
+				utokens = new UTokens(res),
+				todos = new Todos(res),
+				notes = new Notes(res),
+				calendar = new Calendar(res),
+				school = new School(res);
 
 			if (p === '/') {
 				if (user.verify(cookie['UTOKEN'])) {
