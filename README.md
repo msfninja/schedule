@@ -105,7 +105,7 @@ This one is optional, but really makes your life easier and frees from a batch o
 npm i -g nodemon
 ```
 
-The `-g` option will install nodemon globally, so you can use it system-wide in any project<sup id="l-ref-5"><a href="#ref-5">5</a></sup>. Again, you can check the version of `nodemon` installed or its presence in the first place by running the following command:
+The `-g` option will install nodemon globally, so you can use it system-wide in any project<sup id="l-ref-4"><a href="#ref-4">4</a></sup>. Again, you can check the version of `nodemon` installed or its presence in the first place by running the following command:
 
 ```bash
 nodemon --version
@@ -263,7 +263,7 @@ This will leave you with two files: `cert.pem` and `key.pem` (inside the `server
 
 **Important: before you can run the server, you need to run the `configure` file. Otherwise the node app will exit with an error. Go to [this section](#initial-configuration) to get started with the `configure` file.**
 
-If you've run the `configure` file and ready to go, you can initialize the server. Go to the `server` directory:
+If you've run the `configure` file and are ready to go, you can initialize the server. Go to the `server` directory:
 
 ```bash
 cd server
@@ -342,4 +342,4 @@ You can always report issues and create pull requests on Schedule's [GitHub repo
 
 <span id="ref-3">3.</span> <b><a title="Jump up" href="#l-ref-3">^</a></b> User account data (that is saved in the long term by the server unless a user request to delete the data is presented) includes but is not limited to the following: username (this is **not** kept encrypted however, otherwise there would be no way to identify users with Schedule's current design); user password; user to-dos; user notes; and user calendar events.
 
-<span id="ref-5">5.</span> <b><a title="Jump up" href="#l-ref-5">^</a></b> If you need a different configuration for an npm package/module installation, you can run `npm i --help` to get a list of possible options to be used.
+<span id="ref-4">4.</span> <b><a title="Jump up" href="#l-ref-4">^</a></b> If you need a different configuration for an npm package/module installation, you can run `npm i --help` to get a list of possible options to be used.
