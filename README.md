@@ -234,7 +234,7 @@ To run `configure`, change your current working directory to the project's root 
 
 This will create the `schedule-data` directory in your current user home directory with additional subdirectories that will later store user data, root account data, various authentication data and public data to be displayed in the web client of Schedule.
 
-**Important: make sure you will be running the node server as the same user you were running the `configure` file, otherwise the server won't run properly by reading a different home directory than the `configure` file created the `schedule` directory in.**
+**Important: make sure you will be running the node server as the same user you were running the `configure` file, otherwise the server won't run properly by reading a different home directory than the `configure` file created the `schedule-data` directory in.**
 
 ## Server
 
