@@ -1,22 +1,24 @@
 ---
 app:
   name: "Schedule"
-  lname: "Schedule PWA"
+  alt_name: "schedule"
+  long_name: "Schedule PWA"
   title: "A To-dos, Notes And More App"
   desc: "Schedule lets you save to-dos, notes, school timetables and more."
-  version: "0.0.0"
+  version: "0.0.0" # current version
   release:
-    tag: "Unreleased"
+    tag: "Unreleased" # current release
 server:
-  port: 150
+  port: 150 # default listened port
   root:
     session:
-      time: 3600
+      time: 3600 # 1 hour
   usr:
     session:
-      time: 31104000000
+      time: 31104000000 # 1 year
   security:
-    token_length: 96
-    recover_token_length: 96
+    token_length: 96 # only with steps of 32
+    recover_token_length: 96 # only with steps fo 32
+    salt_rounds: 10 # for bcrypt password hashing
 cli:
-  name: "schedule"
+  name: "sch" # name of CLI command
