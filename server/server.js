@@ -18,6 +18,7 @@ const // modules
 	qs = require('querystring'),
 	ip = require('ip'),
 	crypto = require('crypto'),
+	bcrypt = require('bcrypt'),
 	{
 		v1: uuidv1,
 		v4: uuidv4
@@ -339,7 +340,7 @@ function UTokens(res) { // user tokens function
 		fs.writeFile(`${dirs.dat}/usr/${u}/data.json`,JSON.stringify(obj),err => {
 			if (err) term(res,500,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/client/err/500.xhtml`,'r'));
 		});
-		if (c) term(res,302,{'Set-Cookie':`UTOKEN=${token}; Path=/;`,'Location':'/usr'});
+		if (c) term(res,302,{'Set-Cookie':`UTOKEN=${token}; Path=/; Expires=${new Date(time + expires).toUTCString()};`,'Location':'/usr'});
 	};
 
 	this.verify = t => { // verify user token
@@ -393,16 +394,14 @@ function Todos(res) { // to-dos management
 		}
 	};
 
-	this.get = t => {
+	this.get = t => { // get all encrypted to-dos
 		if (user.verify(t)) {
 			let
 				arr = [],
 				u = user.request('tkn',t);
 
 			fs.readdirSync(`${dirs.dat}/usr/${u.usr}/cnt/to-dos`).forEach(e => {
-				let todo = JSON.parse(rd(`${dirs.dat}/usr/${u.usr}/cnt/to-dos/${e}`));
-				todo.id = e;
-				arr.push(todo);
+				arr.push(JSON.parse(rd(`${dirs.dat}/usr/${u.usr}/cnt/to-dos/${e}`)));
 			});
 
 			return arr;
@@ -418,13 +417,13 @@ function Todos(res) { // to-dos management
 			if (target) {
 				fs.unlink(`${dirs.dat}/usr/${u.usr}/cnt/to-dos/${target}`,err => {
 					if (err) throw err;
-				})
+				});
 			}
 		}
 	};
 }
 
-function Notes(res) { // notes management
+function Notes(res) { // notes management // NOT READY FOR USE
 	let user = new User(res);
 
 	this.add = (t,o) => {
