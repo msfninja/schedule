@@ -25,7 +25,8 @@ const // modules
 	} = require('uuid'),
 	YAML = require('yaml'),
 	colors = require('colors'),
-	os = require('os');
+	os = require('os'),
+	mongodb = require('mongodb');
 
 const // cli object constructor (global scope)
 	cli = new CLI();
@@ -96,7 +97,7 @@ const // app functions
 		if (compare(modes,accept).match) {
 			if (modes.includes(accept[accept.indexOf('r')])) {
 				html = html.replace(/\{component\.doctype\}/g,rd(`${dir}/server/client/component/doctype.xhtml`)).replace(/\{component\.meta\}/g,rd(`${dir}/server/client/component/meta.xhtml`)).replace(/\{component\.link\}/g,rd(`${dir}/server/client/component/link.xhtml`)).replace(/\{component\.script\}/g,rd(`${dir}/server/client/component/script.xhtml`)).replace(/\{component\.noscript\}/g,rd(`${dir}/server/client/component/noscript.xhtml`)).replace(/\{component\.loader\}/g,rd(`${dir}/server/client/component/loader.xhtml`)).replace(/\{component\.header\}/g,rd(`${dir}/server/client/component/header.xhtml`)).replace(/\{component\.footer\}/g,rd(`${dir}/server/client/component/footer.xhtml`));
-				html = html.replace(/\{app\.name\}/g,config.app.name).replace(/\{app\.lname\}/g,config.app.lname).replace(/\{app\.title\}/g,config.app.title).replace(/\{app\.desc\}/g,config.app.desc).replace(/\{app\.version\}/g,config.app.version).replace(/\{app\.release.tag\}/g,config.app.release.tag);
+				html = html.replace(/\{app\.name\}/g,config.app.name).replace(/\{app\.long_name\}/g,config.app.long_name).replace(/\{app\.title\}/g,config.app.title).replace(/\{app\.desc\}/g,config.app.desc).replace(/\{app\.version\}/g,config.app.version).replace(/\{app\.release.tag\}/g,config.app.release.tag);
 			}
 			if (modes.includes(accept[accept.indexOf('u')])) {
 				let
@@ -225,9 +226,12 @@ function User(res,req) { // user function
 	this.create = o => { // create user account
 		let
 			h = `${dirs.dat}/usr/${o.usr}`,
+			hash = bcrypt.hash(o.psw,config.server.security.salt_rounds,(err,hash) => {
+				return hash;
+			}),
 			obj = {
 				usr: o.usr,
-				psw: encrypt(o.psw,`${o.psw}${guid()}`.substr(0,32))
+				psw: hash
 			},
 			arr = [
 				`${h}/cnt/calendar`,
