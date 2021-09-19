@@ -26,7 +26,7 @@ const // modules
 	YAML = require('yaml'),
 	colors = require('colors'),
 	os = require('os'),
-	mongodb = require('mongodb');
+	{ MongoClient } = require('mongodb');
 
 const // cli object constructor (global scope)
 	cli = new CLI();
@@ -37,14 +37,30 @@ const // repo
 			url: 'https://github.com/msfninja/schedule',
 			blob: 'https://github.com/msfninja/schedule/blob/main'
 		}
-	}
+	};
+
+let // config and db
+	config,
+	db;
+
+try {
+	config = YAML.parse(fs.readFileSync(`${path.resolve(__dirname,'..')}/config.yml`).toString());
+	if (!config) throw new Error('The config.yml file seems to be incorrectly configured.');
+}
+catch (e) {
+	throw e;//cli.err(true,e,`Download the proper config.yml file from the repository:\n\n${repo.gh.blob}/config.yml`);
+}
 
 const // dirs
 	dir = path.resolve(__dirname,'..'),
 	dirs = {
 		usr: os.homedir(),
-		dat: path.join(os.homedir(),'schedule-data')
+		dat: path.join(os.homedir(),`${config.app.alt_name}-data`)
 	};
+
+const // mongodb
+	dburl = 'mongodb://127.0.0.1:27017',
+	dbclient = new MongoClient(dburl);
 
 const // ssl
 	opt = {
@@ -71,16 +87,6 @@ const // basic operations
 	format = s => {
 		return s.toLowerCase().replace(/[^a-z0-9\-]/g,'').replace(/ /g,'-'); 
 	};
-
-let config; // config
-
-try {
-	config = YAML.parse(rd(`${dir}/config.yml`));
-	if (!config) throw new Error('The config.yml file seems to be incorrectly configured.');
-}
-catch (e) {
-	cli.err(true,e.message,`Download the proper config.yml file from the repository:\n\n${repo.gh.blob}/config.yml`);
-}
 
 const // app functions
 	term = (r,s,h,c) => {
@@ -174,7 +180,7 @@ function CLI() {
 	};
 }
 
-function Root(res,req) { // root function
+function Root(res,req) { // root function // NOT READY FOR USE
 	let rtokens = new RTokens(res);
 
 	this.verify = a => { // verify root credentials or token
@@ -198,7 +204,7 @@ function Root(res,req) { // root function
 		}
 	};
 
-	this.cred = (t,a) => { // credentials recovery
+	this.cred = (t,a) => { // credentials recovery // NOT READY FOR USE
 		if (t === 'set') {
 			let obj = {};
 			obj.usr = a[0];
@@ -225,14 +231,14 @@ function User(res,req) { // user function
 
 	this.create = o => { // create user account
 		let
-			h = `${dirs.dat}/usr/${o.usr}`,
 			hash = bcrypt.hash(o.psw,config.server.security.salt_rounds,(err,hash) => {
 				return hash;
 			}),
 			obj = {
 				usr: o.usr,
-				psw: hash
+				hash: hash
 			},
+			h = `${dirs.dat}/usr/${obj.usr}`,
 			arr = [
 				`${h}/cnt/calendar`,
 				`${h}/cnt/notes`,
@@ -243,7 +249,12 @@ function User(res,req) { // user function
 			fs.accessSync(`${dirs.dat}/usr`,fs.constants.R_OK | fs.constants.W_OK);
 		}
 		catch (e) {
-			fs.chmodSync(`${dirs.dat}/usr`,0o724);
+			try {
+				fs.chmodSync(`${dirs.dat}/usr`,0o724);
+			}
+			catch (e) {
+				cli.err(true,`${config.app.name} cannot save any user data to this directory:\n\n${h}\n\n${e}`,`Check the permissions of the user you run this node app as on that directory.`);
+			}
 		}
 
 		arr.forEach(e => {
@@ -252,19 +263,27 @@ function User(res,req) { // user function
 
 		fs.writeFile(`${h}/data.json`,JSON.stringify(obj),err => {
 			if (err) throw err;
-			utokens.create(o.usr,true);
+			utokens.create(obj.usr,true);
 		});
 	};
 
 	this.verify = a => { // verify user credentials or token
 		if (a) {
 			if (Object.prototype.toString.call(a) === '[object Array]') {
-				let usr = fs.readdirSync(`${dirs.dat}/usr`).find(e => e === a[0]);
+				let usr = fs.readdirSync(`${dirs.dat}/usr`).find(e => e === obj.usr);
+
 				if (usr) {
-					let dat = JSON.parse(rd(`${dirs.dat}/usr/${usr}/data.json`));
-					if (dat.usr === a[0] && decrypt(dat.psw,`${a[1]}${guid()}`.substr(0,32)) === a[1]) {
-						return true;
-					}
+					let
+						obj = {
+							usr: usr,
+							psw: a[1]
+						},
+						dat = JSON.parse(rd(`${dirs.dat}/usr/${obj.usr}/data.json`)),
+						match = bcrypt.compare(obj.psw,dat.hash,(err,res) => {
+							return err ? false : res;
+						});
+
+					if (dat.usr === obj.usr && match) return true;
 				}
 			}
 			else if (typeof a === 'string') {
@@ -387,44 +406,13 @@ function Todos(res) { // to-dos management
 	let user = new User(res);
 
 	this.add = (t,o) => {
-		if (user.verify(t)) {
-			let
-				dt = new Date(),
-				u = user.request('tkn',t);
-
-			fs.writeFile(`${dirs.dat}/usr/${u.usr}/cnt/to-dos/${dt.getFullYear()}${dt.getMonth()}${dt.getDate()}${dt.getHours()}${dt.getMinutes()}${dt.getSeconds()}.json`,JSON.stringify(o),err => {
-				if (err) throw err;
-			});
-		}
+		if (user.verify(t))
+		db.collection('todos');
 	};
 
-	this.get = t => { // get all encrypted to-dos
-		if (user.verify(t)) {
-			let
-				arr = [],
-				u = user.request('tkn',t);
+	this.get = t => {};
 
-			fs.readdirSync(`${dirs.dat}/usr/${u.usr}/cnt/to-dos`).forEach(e => {
-				arr.push(JSON.parse(rd(`${dirs.dat}/usr/${u.usr}/cnt/to-dos/${e}`)));
-			});
-
-			return arr;
-		}
-	};
-
-	this.delete = (t,i) => {
-		if (user.verify(t)) {
-			let
-				u = user.request('tkn',t),
-				target = fs.readdirSync(`${dirs.dat}/usr/${u.usr}/cnt/to-dos`).find(e => e === i);
-
-			if (target) {
-				fs.unlink(`${dirs.dat}/usr/${u.usr}/cnt/to-dos/${target}`,err => {
-					if (err) throw err;
-				});
-			}
-		}
-	};
+	this.delete = (t,i) => {};
 }
 
 function Notes(res) { // notes management // NOT READY FOR USE
@@ -634,11 +622,12 @@ const // auth
 		return str;
 	};
 
-if (rd(`${dirs.usr}/schedule-data/init`)) {
+if (rd(`${dirs.usr}/${config.app.alt_name}-data/init`)) {
 	try {
+		(async () => { await dbclient.connect(); })();
+		db = dbclient.db(config.app.alt_name);
 		start(config.server.port);
-		cli.clear();
-		cli.log(`Server running at https://${ip.address()}:${config.server.port}\n\n`);
+		cli.clear(); cli.log(`Server running at https://${ip.address()}:${config.server.port}\n\n`);
 	}
 	catch (e) {
 		cli.err(true,`The server could not be initiated:\n\n${e}`);
