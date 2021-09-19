@@ -44,7 +44,7 @@ let // config and db
 	db;
 
 try {
-	config = YAML.parse(fs.readFileSync(`${path.resolve(__dirname,'..')}/config.yml`).toString());
+	config = YAML.parse(fs.readFileSync(path.join(path.resolve(__dirname,'..'),'config.yml')).toString());
 	if (!config) throw new Error('The config.yml file seems to be incorrectly configured.');
 }
 catch (e) {
