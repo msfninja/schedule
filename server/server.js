@@ -403,11 +403,14 @@ function UTokens(res) { // user tokens function
 }
 
 function Todos(res) { // to-dos management
-	let user = new User(res);
+	let
+		user = new User(res),
+		cl = db.collection('todos');
 
 	this.add = (t,o) => {
-		if (user.verify(t))
-		db.collection('todos');
+		if (user.verify(t)) {
+			//
+		}
 	};
 
 	this.get = t => {};
