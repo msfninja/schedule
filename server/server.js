@@ -48,7 +48,7 @@ try {
 	if (!config) throw new Error('The config.yml file seems to be incorrectly configured.');
 }
 catch (e) {
-	throw e;//cli.err(true,e,`Download the proper config.yml file from the repository:\n\n${repo.gh.blob}/config.yml`);
+	cli.err(true,e,`Download the proper config.yml file from the repository:\n\n${repo.gh.blob}/config.yml`);
 }
 
 const // dirs
