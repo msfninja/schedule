@@ -8,7 +8,7 @@ Official website: [https://143.176.32.149:150](https://143.176.32.149:150).
 
 Schedule is a web application, allowing you to create and save to-dos, notes, calendar events and other miscellaneous information like your school timetable on a server, and make it accessible, manageable and sync-able from and on any device<sup id="l-ref-1"><a href="#ref-1">1</a></sup>.
 
-It's a valuable tool for any student, or generally, anyone who necessitates keeping track of his tasks in the forms of to-os or store information in the forms of memoranda, or even an agenda. Since Schedule is a web application, inferring it is accessed from a web browser<sup id="l-ref-2"><a href="#ref-2">2</a></sup>, it can be used on implicitly any device with a web browser and access to the internet or network on which the server hosting Schedule is running. For accessibility (specifically on mobile devices), Schedule allows a progressive web application, that you can install as a (browser emulated) app, which provides access to it with ease right from your device's home screen (or your device-specific environment).
+It's a valuable tool for any student, or generally, anyone who necessitates keeping track of his tasks in the forms of to-os or store information in the forms of memoranda, or even an agenda. Since Schedule is a web application, inferring it is accessed from a web browser<sup id="l-ref-2"><a href="#ref-2">2</a></sup>, it can be used on implicitly any device with a web browser and access to the internet or network on which the server hosting Schedule is running. For accessibility (specifically on mobile devices), Schedule allows a progressive web application that you can install as a (browser emulated) app, which provides access to it with ease right from your device's home screen (or your device-specific environment).
 
 Schedule is simple to use, has a fine and candid graphical user interface and works seamlessly. Apart from that, what I'd like to denote is that Schedule is quite privacy-friendly, as it stores all user data<sup id="l-ref-3"><a href="#ref-3">3</a></sup> on the server encrypted, using the Advanced Encryption Standard algorithm with a 256-bit key size, which assures nobody but you can access your data.
 
@@ -63,7 +63,7 @@ If you want to host Schedule yourself on your server, you'd need several items p
 
 ### Node.js Installation
 
-Frist of all, you'll need [Node.js](https://nodejs.org/en/). Schedule essentially boils down to a node app, so to run the app, you need Node.js. You can download an installer or the source code from their [official website](https://nodejs.org/en/download/), or run these commands in your shell:
+Frist of all, you'll need [Node.js](https://nodejs.org/en/). Schedule essentially boils down to a node application, so to run the app, you need Node.js. You can download an installer or the source code from their [official website](https://nodejs.org/en/download/), or run these commands in your shell:
 
 **Ubuntu/Debian:**
 
@@ -95,11 +95,11 @@ If this returns an error, or doesn't output anything, it means that either Node.
 
 ### Npm Modules
 
-Apart from Node.js, this node app requires several modules to operate properly which do not come preinstalled with Node.js by default. The modules `ip`, `yaml`, `uuid` and `colors` are required for Schedule to work, and other utilities like `nodemon` come in handy, but are optional. Further on there is also Sass and CoffeeScript, but you would only need those if you are planning on modifying any of the `.sass` or `.coffee` files (presuming you are going to compile the code as well to reflect the changes).
+Apart from Node.js, this node application requires several modules to operate properly which do not come preinstalled with Node.js by default. The modules `ip`, `yaml`, `uuid` and `colors` are required for Schedule to work, and other utilities like `nodemon` come in handy, but are optional. Further on there is also Sass and CoffeeScript, but you would only need those if you are planning on modifying any of the `.sass` or `.coffee` files (presuming you are going to compile the code as well to reflect the changes).
 
 #### Nodemon Installation
 
-This one is optional, but really makes your life easier and frees from a batch of headaches. Instead of manually reinitiating your node app upon each a crash of it or modification to its source code, you can automate this process by using [nodemon](https://nodemon.io/). To install nodemon, issue this command in your shell:
+This one is optional, but really makes your life easier and frees from a batch of headaches. Instead of manually reinitiating your node application upon each a crash of it or modification to its source code, you can automate this process by using [nodemon](https://nodemon.io/). To install nodemon, issue this command in your shell:
 
 ```bash
 npm i -g nodemon
@@ -147,7 +147,7 @@ coffee --version
 
 **Important: you should locally clone Schedule's repository before proceeding with this section, as you need a place to install the npm modules to. Follow [this section](#repository-cloning) first, and then proceed with installing the mandatory npm modules.**
 
-As mentioned [earlier](#npm-modules), the `ip`, `yaml`, `uuid` and `colors` modules do not come preinstalled with Node.js by default. This means, for Schedule to work properly, you have to install them manually using npm.
+As mentioned [earlier](#npm-modules), the `ip`, `yaml`, `uuid` and `colors` modules do not come preinstalled with Node.js by default. This means, for Schedule to work properly, you have to install them manually using the (CLI) npm package manager.
 
 You can issue the following command in your shell that will install them all (by default I have the `node_modules` directory inside the `server` directory, hence the `cd server` (assuming you are in the working directory to which you cloned Schedule's repository to (from [this section](#repository-cloning))) before the actual installation of the npm modules):
 
@@ -157,10 +157,12 @@ cd server; npm i ip yaml uuid colors
 
 A brief description of what every module is used for:
 
- - `ip`: the `ip` module is used solely for one purpose&#8212;retrieve the server's IP address. It is not used for any IP logging or anything similar as it may seem. Schedule does not keep any personal/identifiable user data logs, and you can verify that in the source code.
+ - `ip`: the `ip` module is used solely for one purpose&#8212;retrieve the server's IP address. It is not used for any internet protocol addresses logging or anything similar as it may seem. Schedule does not keep any personal or possbily identifiable user data logs, or any logs at all, and you can verify that in the source code.
  - `yaml`: the `yaml` module is used to parse YAML files. An example can be the `config.yml` file in the root directory of the project, which holds various configuration properties for Schedule that are read by the `server/server.js` file.
- - `uuid`: the `uuid` module is used to generate universally unique IDs. An example usage is using them as tokens for user sessions and similar activities.
+ - `uuid`: the `uuid` module is used to generate universally unique identifiers. An example usage is using them as tokens for user sessions and similar activities.
  - `colors`: the `colors` module is really just used to style text output in the console, and that's what it's supposed to be used for.
+
+ If you already read through the [repsitory cloning](#repository-cloning) and [git installation](#git-installation) sections, you can skip to [this section](#initial-configuration).
 
 ### Git Installation
 
@@ -192,6 +194,8 @@ Git's version or presence on the machine can be checked by running the following
 git --version
 ```
 
+Now that you have installed git, you can proceed with [this section](#repository-cloning) on cloning Schedule's repository.
+
 ## Repository Cloning
 
 Before you start cloning using git, make sure you have git present on your machine. If you don't have git, proceed with [this section](#git-installation) first. Otherwise, make sure you are in your desired working directory (in your shell). If you want to clone Schedule to the your home directory, issue the following to change your current working directory to your home directory in your shell:
@@ -218,7 +222,7 @@ Or you can simply try to go to the cloned directory by running the following in 
 cd schedule
 ```
 
-After successfully cloning Schedule's repository to your machine, you can proceed with installing other necessary npm modules [here](#other-modules).
+After successfully cloning Schedule's repository to your machine, you can proceed with installing other necessary npm modules in [this section](#other-modules).
 
 ## Initial Configuration
 
@@ -234,13 +238,15 @@ This will create the `schedule-data` directory in your current user home directo
 
 **Important: make sure you will be running the node server as the same user you were running the `configure` file, otherwise the server won't run properly by reading a different home directory than the `configure` file created the `schedule-data` directory in.**
 
+If you're here from the server initiation section, you can skip [to it](#server-initation).
+
 ## Server
 
-There are a few more things you have to do before running the `server/server.js` file. Schedule has several features which require its traffic to go over HTTPS, rather than HTTP. First of, passwords and other sensitive information are being transmitted between the client and the server. Additionally, Schedule offers a PWA functionality, which by the majority of browsers I know has a requirement of its traffic to be transmitted over HTTPS.
+There are a few more things you have to do before running the `server/server.js` file. Schedule has several features which require its traffic to go over the hypertext transfer protocol **secure**, rather than HTTP. First of all, passwords and sensitive information alike are being transmitted over the network between the client and the server. Additionally, Schedule offers a PWA functionality, which by the majority of browsers I know has a requirement of its traffic to be transmitted over HTTPS.
 
 ### SSL Certificate
 
-If you have an SSL certificate, put it and the rest that belongs to it into the `server/ssl` directory, and rename the key file to `key.pem`, and the certificate file to `cert.pem`.
+If you have a secure sockets layer certificate, put it and the rest that belongs to it into the `server/ssl` directory, and rename the key file to `key.pem`, and the certificate file to `cert.pem`.
 
 To generate a self-signed SSL certificate using `openssl`, go to the `server/ssl` directory:
 
@@ -261,7 +267,7 @@ This will leave you with two files: `cert.pem` and `key.pem` (inside the `server
 
 ### Server Initiation
 
-**Important: before you can run the server, you need to run the `configure` file. Otherwise the node app will exit with an error. Go to [this section](#initial-configuration) to get started with the `configure` file.**
+**Important: before you can run the server, you need to run the `configure` file. Otherwise the node application will exit with an error. Go to [this section](#initial-configuration) to get started with the `configure` file.**
 
 If you've run the `configure` file and are ready to go, you can initialize the server. Go to the `server` directory:
 
@@ -275,7 +281,7 @@ And initiate the node server by running this command in your shell:
 nodemon server.js --ignore '*.json'
 ```
 
-The `--ignore` option is set to `'*.json'` so the server won't reinitiate every time there is a change to any JSON file within the project directory.
+The `--ignore` option is set to `'*.json'` so the server won't reinitiate every time there is a change to any JSON file within the `server` directory.
 
 ### Server Configuration
 
@@ -288,7 +294,7 @@ server:
   port: 150
 ```
 
-Where presumably the default number 150 represents the port. Changing this to a value that is not a valid TCP/UDP port will result in an error upon initiating the server.
+Where presumably the default number 150 represents the port. Changing this to a value that is not a valid transmission control protocol or user datagram protocol port will result in an error upon initiating the server.
 
 ### Compiling Sass Code
 
@@ -338,7 +344,7 @@ You can always report issues and create pull requests on Schedule's [GitHub repo
 
 <span id="ref-1">1.</span> <b><a title="Jump up" href="#l-ref-1">^</a></b> The scope of devices you can use to access Schedule's web client varies in scale based on how the network on which the server hosting Schedule runs is configured. If you have configured your router's network address translation regarding your server such for it to be accessible to the World Wide Web (which in case of the absence of such a feature is arrangeable with your internet service provider), then Schedule would indeed be accessible from any device in the world, albeit not always on the network the server runs on. With some particular configurations of routers, it is possible that devices connected to the same (wireless) local area network on which the server runs will not be able to communicate with it, as in cases where you use the server's internet protocol address as means of uniform resource locators to establish a connection with it, as that is also the router's default gateway, which will ultimately fail you to connect to the server.
 
-<span id="ref-2">2.</span> <b><a title="Jump up" href="#l-ref-2">^</a></b> If you install the web client of Schedule as a progressive web application on your device, you will be accessing it from a browser-imitated application nevertheless. The way the application (or its shortcut) will appear and behave in the environment that you installed Schedule's web client from and to is browser dependant, so technically, it's accessed from a browser at all times and not an actual native platform-specific application, even though on some platform it looks like one.
+<span id="ref-2">2.</span> <b><a title="Jump up" href="#l-ref-2">^</a></b> If you install the web client of Schedule as a progressive web application on your device, you will be accessing it from a browser emulated application nevertheless. The way the application (or its shortcut) will appear and behave in the environment that you installed Schedule's web client from and to is browser and platoform dependant, so technically, it's accessed from a web browser at all times and not an actual native platform-specific application, even though on some platforms it looks like one.
 
 <span id="ref-3">3.</span> <b><a title="Jump up" href="#l-ref-3">^</a></b> Long term user account data that's stored on the server includes but is not limited to the following: username (this is **not** kept encrypted, however, otherwise there would be no feasible way to identify users with Schedule's current design, and neither is there a sensible reason to do so); user password; user to-dos; user notes; and user calendar events and other eclectic metadata. Indubitably, as Schedule will be improving over time and new features will be added, the extent of what is inclusive in user account data will increase along.
 
