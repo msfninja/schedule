@@ -238,7 +238,7 @@ This will create the `schedule-data` directory in your current user home directo
 
 **Important: make sure you will be running the node server as the same user you were running the `configure` file, otherwise the server won't run properly by reading a different home directory than the `configure` file created the `schedule-data` directory in.**
 
-If you're here from the server initiation section, you can skip [to it](#server-initation).
+If you're here from the server initiation section, you can skip [to it](#server-initiation).
 
 ## Server
 
