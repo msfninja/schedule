@@ -6,11 +6,11 @@ Official website: [https://143.176.32.149:150](https://143.176.32.149:150).
 
 **Please note that currently the project is under development. This means none of the code in this repository is guaranteed to be working.**
 
-Schedule is a web application, allowing you to create and save to-dos, notes, calendar events and other miscellaneous information like your school timetable, on a server, and access it from any device<sup id="l-ref-1"><a href="#ref-1">1</a></sup>.
+Schedule is a web application, allowing you to create and save to-dos, notes, calendar events and other miscellaneous information like your school timetable on a server, and make it accessible, manageable and sync-able from and on any device<sup id="l-ref-1"><a href="#ref-1">1</a></sup>.
 
-It's a handy tool for any student, or generally anyone who needs to keep track of his tasks or a place to store information in forms of memos. Since Schedule is a web application, implying it is being accessed from a web browser<sup id="l-ref-2"><a href="#ref-2">2</a></sup>, it can be used on virtually any device with a web browser and access to the internet/network on which the server is hosted. For accessibility (specifically on mobile devices), Schedule offers a progressive web application (PWA), so that you can install it as an (browser emulated) app, which provides access to it with ease right from your home screen.
+It's a valuable tool for any student, or generally, anyone who necessitates keeping track of his tasks in the forms of to-os or store information in the forms of memoranda, or even an agenda. Since Schedule is a web application, inferring it is accessed from a web browser<sup id="l-ref-2"><a href="#ref-2">2</a></sup>, it can be used on implicitly any device with a web browser and access to the internet or network on which the server hosting Schedule is running. For accessibility (specifically on mobile devices), Schedule allows a progressive web application, that you can install as a (browser emulated) app, which provides access to it with ease right from your device's home screen (or your device-specific environment).
 
-Schedule is easy to use, has a nice and straightforward GUI and works seamlessly. Apart from that, Schedule is also a privacy-friendly utility. It stores all user data<sup id="l-ref-3"><a href="#ref-3">3</a></sup> on the server encrypted, with the Advanced Encryption Standard using a 256 bit key size, which ensures nobody but you can access your data.
+Schedule is simple to use, has a fine and candid graphical user interface and works seamlessly. Apart from that, what I'd like to denote is that Schedule is quite privacy-friendly, as it stores all user data<sup id="l-ref-3"><a href="#ref-3">3</a></sup> on the server encrypted, using the Advanced Encryption Standard algorithm with a 256-bit key size, which assures nobody but you can access your data.
 
 <table>
 	<tr>
@@ -51,11 +51,11 @@ Schedule is easy to use, has a nice and straightforward GUI and works seamlessly
 
 ## Notice
 
-Schedule is an open source project licensed under the [GNU General Public License version 3.0](https://www.gnu.org/licenses/gpl-3.0.html). To see what you may and may not do with the source code of this project, see the [license](https://github.com/msfninja/schedule/blob/main/LICENSE). The license can also be found in the root directory of the project as `LICENSE`.
+Schedule is an open-source project licensed under the [GNU General Public License version 3.0](https://www.gnu.org/licenses/gpl-3.0.html). To see what you may and may not do with the source code of this project, see the [license](https://github.com/msfninja/schedule/blob/main/LICENSE). The license can also be found in the root directory of the project as `LICENSE`.
 
-Schedule is open source because 1) this way users can see how the thing works and what it does for themselves and 2) other developers can utilize the code.
+Schedule is open-source because 1) this way users can see how the utility works and does for themselves and 2) other developers can utilize the code.
 
-This `README.md` file will be assuming you are using a Linux distribution, so when encountering commands or other system-related things and using an operating system other than Linux or a Linux distribution that is not featured, make sure you use your system's equivalent variant or way of achieving the result.
+This `README.md` file will be assuming you are using a Linux distribution, so when encountering commands or other system-related things and using an operating system other than a Linux-based one or a Linux distribution that is not featured, make sure you use your system's equivalent alternative or approach of achieving the outcome.
 
 ## Prerequisites
 
@@ -63,7 +63,7 @@ If you want to host Schedule yourself on your server, you'd need several items p
 
 ### Node.js Installation
 
-Frist of, you'll need [Node.js](https://nodejs.org/en/). Schedule basically boils down to a node app, so to run the app, you need Node.js. You can download an installer or the source code from their [official website](https://nodejs.org/en/download/), or run these commands in your shell:
+Frist of all, you'll need [Node.js](https://nodejs.org/en/). Schedule essentially boils down to a node app, so to run the app, you need Node.js. You can download an installer or the source code from their [official website](https://nodejs.org/en/download/), or run these commands in your shell:
 
 **Ubuntu/Debian:**
 
@@ -91,7 +91,7 @@ You can check what version of Node.js is installed (and if Node.js is actually i
 node --version
 ```
 
-If this returns an error, or doesn't output anything, it means that either Node.js is not installed, or installed incorrectly. Try reinstalling in this case.
+If this returns an error, or doesn't output anything, it means that either Node.js is not installed, or installed incorrectly. Try reinstalling it in this case.
 
 ### Npm Modules
 
@@ -330,16 +330,16 @@ coffee -o ./public/client/js/main.js -w ./server/client/coffee/main.coffee
 
 ## Support
 
-If it happens that you need support setting up or configuring Schedule, or you have a question or idea, you can reach me out on the `#schedule` channel of the freenode IRC server (where I'm present 24/7, so any message sent there will be seen by me), or mail me to [msfninja@airmail.cc](mailto:msfninja@airmail.cc).
+If you will run into a situation that will require support, either for setting up, configuring Schedule or what else, or you have a question or idea that you'd like to suggest, you can reach me out on the `#schedule` channel of the freenode internet relay chat server (where I'm present 24/7, so any message sent there will be seen by me eventually), or mail me to [msfninja@airmail.cc](mailto:msfninja@airmail.cc).
 
 You can always report issues and create pull requests on Schedule's [GitHub repository](https://github.com/msfninja/schedule).
 
 ## Notes
 
-<span id="ref-1">1.</span> <b><a title="Jump up" href="#l-ref-1">^</a></b> The scope of what devices you can use to access Schedule depends on how your network on which the server runs is configured. If you have configured your router's network address translation (NAT) in regard to your server such for it to be accessible to the World Wide Web (WWW) (which, in case of the absence of such a feature, can be organized with your internet service provider (ISP)), then Schedule would indeed be accessible from any device in the world (with some configurations/routers, it is possible that those devices connected to the same local area network (LAN) to which the server is connected to will not be able to communicate with the server (in cases where you use the IP address of the server, as that is the router's default gateway)).
+<span id="ref-1">1.</span> <b><a title="Jump up" href="#l-ref-1">^</a></b> The scope of devices you can use to access Schedule's web client varies in scale based on how the network on which the server hosting Schedule runs is configured. If you have configured your router's network address translation regarding your server such for it to be accessible to the World Wide Web (which in case of the absence of such a feature is arrangeable with your internet service provider), then Schedule would indeed be accessible from any device in the world, albeit not always on the network the server runs on. With some particular configurations of routers, it is possible that devices connected to the same (wireless) local area network on which the server runs will not be able to communicate with it, as in cases where you use the server's internet protocol address as means of uniform resource locators to establish a connection with it, as that is also the router's default gateway, which will ultimately fail you to connect to the server.
 
-<span id="ref-2">2.</span> <b><a title="Jump up" href="#l-ref-2">^</a></b> If you install Schedule as a PWA on your device, you will be accessing it from an imitated app, but technically still a browser.
+<span id="ref-2">2.</span> <b><a title="Jump up" href="#l-ref-2">^</a></b> If you install the web client of Schedule as a progressive web application on your device, you will be accessing it from a browser-imitated application nevertheless. The way the application (or its shortcut) will appear and behave in the environment that you installed Schedule's web client from and to is browser dependant, so technically, it's accessed from a browser at all times and not an actual native platform-specific application, even though on some platform it looks like one.
 
-<span id="ref-3">3.</span> <b><a title="Jump up" href="#l-ref-3">^</a></b> User account data (that is saved in the long term by the server unless a user request to delete the data is presented) includes but is not limited to the following: username (this is **not** kept encrypted however, otherwise there would be no way to identify users with Schedule's current design); user password; user to-dos; user notes; and user calendar events.
+<span id="ref-3">3.</span> <b><a title="Jump up" href="#l-ref-3">^</a></b> Long term user account data that's stored on the server includes but is not limited to the following: username (this is **not** kept encrypted, however, otherwise there would be no feasible way to identify users with Schedule's current design, and neither is there a sensible reason to do so); user password; user to-dos; user notes; and user calendar events and other eclectic metadata. Indubitably, as Schedule will be improving over time and new features will be added, the extent of what is inclusive in user account data will increase along.
 
-<span id="ref-4">4.</span> <b><a title="Jump up" href="#l-ref-4">^</a></b> If you need a different configuration for an npm package/module installation, you can run `npm i --help` to get a list of possible options to be used.
+<span id="ref-4">4.</span> <b><a title="Jump up" href="#l-ref-4">^</a></b> If you need a different configuration for an npm package or module installation, you can issue `npm i --help` in your shell to get a list of possible options to be used for installation.
