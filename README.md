@@ -8,7 +8,7 @@ Official website: [https://143.176.32.149:150](https://143.176.32.149:150).
 
 Schedule is a web application, allowing you to create and save to-dos, notes, calendar events and other miscellaneous information like your school timetable on a server, and make it accessible, manageable and sync-able from and on any device<sup id="l-ref-1"><a href="#ref-1">1</a></sup>.
 
-It's a valuable tool for any student, or generally, anyone who necessitates keeping track of his tasks in the forms of to-os or store information in the forms of memoranda, or even an agenda. Since Schedule is a web application, inferring it is accessed from a web browser<sup id="l-ref-2"><a href="#ref-2">2</a></sup>, it can be used on implicitly any device with a web browser and access to the internet or network on which the server hosting Schedule is running. For accessibility (specifically on mobile devices), Schedule allows a progressive web application that you can install as a (browser emulated) app, which provides access to it with ease right from your device's home screen (or your device-specific environment).
+It's a valuable tool for any student, or generally, anyone who necessitates keeping track of his tasks in the forms of to-os or store information in the forms of memoranda, or even an agenda. Since Schedule is a web application, inferring it is accessed from a web browser<sup id="l-ref-2"><a href="#ref-2">2</a></sup>, it can be used on implicitly any device with a web browser and access to the internet or network on which the server hosting Schedule is running. For accessibility (specifically on mobile devices), Schedule allows a progressive web application that you can install as a (browser emulated) application, which provides access to it with ease right from your device's home screen (or your device-specific environment).
 
 Schedule is simple to use, has a fine and candid graphical user interface and works seamlessly. Apart from that, what I'd like to denote is that Schedule is quite privacy-friendly, as it stores all user data<sup id="l-ref-3"><a href="#ref-3">3</a></sup> on the server encrypted, using the Advanced Encryption Standard algorithm with a 256-bit key size, which assures nobody but you can access your data.
 
@@ -63,7 +63,7 @@ If you want to host Schedule yourself on your server, you'd need several items p
 
 ### Node.js Installation
 
-Frist of all, you'll need [Node.js](https://nodejs.org/en/). Schedule essentially boils down to a node application, so to run the app, you need Node.js. You can download an installer or the source code from their [official website](https://nodejs.org/en/download/), or run these commands in your shell:
+Frist of all, you'll need [Node.js](https://nodejs.org/en/). Schedule essentially boils down to a node application, so to run the application, you need Node.js. You can download an installer or the source code from their [official website](https://nodejs.org/en/download/), or run these commands in your shell:
 
 **Ubuntu/Debian:**
 
