@@ -149,15 +149,15 @@ coffee --version
 
 As mentioned [earlier](#npm-modules), the `ip`, `yaml`, `uuid` and `colors` modules do not come preinstalled with Node.js by default. This means, for Schedule to work properly, you have to install them manually using the (CLI) npm package manager.
 
-You can issue the following command in your shell that will install them all (by default I have the `node_modules` directory inside the `server` directory, hence the `cd server` (assuming you are in the working directory to which you cloned Schedule's repository to (from [this section](#repository-cloning))) before the actual installation of the npm modules):
+You can issue the following command in your shell that will install them all (by default I have the `node_modules` directory inside the `server` directory, hence the `cd schedule/server` (assuming you are in the working directory to which you cloned Schedule's repository to (from [this section](#repository-cloning))) before the actual installation of the npm modules):
 
 ```bash
-cd server; npm i ip yaml uuid colors
+cd schedule/server; npm i ip yaml uuid colors
 ```
 
 A brief description of what every module is used for:
 
- - `ip`: the `ip` module is used solely for one purpose&#8212;retrieve the server's IP address. It is not used for any internet protocol addresses logging or anything similar as it may seem. Schedule does not keep any personal or possbily identifiable user data logs, or any logs at all, and you can verify that in the source code.
+ - `ip`: the `ip` module is used solely for one purpose&#8212;retrieve the server's internet protocol address. It is not used for any IP logging or anything similar as it may seem. Schedule does not keep any personal or possbily identifiable user data logs, or any logs at all, and you can verify that in the source code.
  - `yaml`: the `yaml` module is used to parse YAML files. An example can be the `config.yml` file in the root directory of the project, which holds various configuration properties for Schedule that are read by the `server/server.js` file.
  - `uuid`: the `uuid` module is used to generate universally unique identifiers. An example usage is using them as tokens for user sessions and similar activities.
  - `colors`: the `colors` module is really just used to style text output in the console, and that's what it's supposed to be used for.
