@@ -48,7 +48,8 @@ try {
 	if (!config) throw new Error('The config.yml file seems to be incorrectly configured.');
 }
 catch (e) {
-	cli.err(true,e,`Download the proper config.yml file from the repository:\n\n${repo.gh.blob}/config.yml`);
+	cli.err(e,`Download the proper config.yml file from the repository:\n\n${repo.gh.blob}/config.yml`);
+	process.exit(1);
 }
 
 const // dirs
@@ -98,20 +99,49 @@ const // app functions
 		let
 			html = rd(h),
 			modes = m.split(''),
-			accept = ['a','r','u','x'];
+			accept = ['a','r','u','x'],
+			components = [
+				[
+					'doctype',
+					'footer',
+					'hedaer',
+					'link',
+					'loader',
+					'meta',
+					'noscript',
+					'script'
+				],
+				[
+					'usr.nav',
+					'usr.pwa',
+					'usr.script'
+				]
+			];
 
 		if (compare(modes,accept).match) {
 			if (modes.includes(accept[accept.indexOf('r')])) {
-				html = html.replace(/\{component\.doctype\}/g,rd(`${dir}/server/client/component/doctype.xhtml`)).replace(/\{component\.meta\}/g,rd(`${dir}/server/client/component/meta.xhtml`)).replace(/\{component\.link\}/g,rd(`${dir}/server/client/component/link.xhtml`)).replace(/\{component\.script\}/g,rd(`${dir}/server/client/component/script.xhtml`)).replace(/\{component\.noscript\}/g,rd(`${dir}/server/client/component/noscript.xhtml`)).replace(/\{component\.loader\}/g,rd(`${dir}/server/client/component/loader.xhtml`)).replace(/\{component\.header\}/g,rd(`${dir}/server/client/component/header.xhtml`)).replace(/\{component\.footer\}/g,rd(`${dir}/server/client/component/footer.xhtml`));
-				html = html.replace(/\{app\.name\}/g,config.app.name).replace(/\{app\.long_name\}/g,config.app.long_name).replace(/\{app\.title\}/g,config.app.title).replace(/\{app\.desc\}/g,config.app.desc).replace(/\{app\.version\}/g,config.app.version).replace(/\{app\.release.tag\}/g,config.app.release.tag);
+				for (var i = components[0].length - 1; i >= 0; i--) {
+					html = html.replace(new RegExp(`\{component\.${components[0][i]}\}`,'g'),rd(`${dir}/server/client/component/${components[0][i]}.xhtml`));
+				}
+
+				for (const prop in config.app) {
+					html = html.replace(new RegExp(`\{app\.${prop}\}`,'g'),config.app[prop]);
+				}
 			}
 			if (modes.includes(accept[accept.indexOf('u')])) {
 				let
 					user = new User(res,req),
 					cookie = cookies(req),
 					dat = user.request('tkn',cookie['UTOKEN']);
-				html = html.replace(/\{component\.usr\.pwa\}/g,rd(`${dir}/server/client/component/usr.pwa.xhtml`)).replace(/\{component\.usr\.script\}/g,rd(`${dir}/server/client/component/usr.script.xhtml`)).replace(/\{component\.usr\.nav\}/g,rd(`${dir}/server/client/component/usr.nav.xhtml`)).replace(/\{nav.tabs.true\}/g,createNav(true)).replace(/\{nav.tabs.false\}/g,createNav(false));
-				html = html.replace(/\{user\.name\}/g,dat.usr);
+
+				for (var i = components[1].length - 1; i <= 0; i--) {
+					html = html.replace(new RegExp(`\{component\.${components[1][i]}\}`,'g'),rd(`${dir}/server/client/component/${components[1][i]}.xhtml`));
+				}
+
+				html = html
+					.replace(/\{nav.tabs.true\}/g,createNav(true))
+					.replace(/\{nav.tabs.false\}/g,createNav(false))
+					.replace(/\{user\.name\}/g,dat.usr);
 			}
 		}
 
@@ -132,7 +162,7 @@ const // site functions
 	createNav = c => {
 		let
 			html = '',
-			navdat = YAML.parse(rd(`${dir}/nav.yml`)).nav;
+			navdat = YAML.parse(rd(`${dir}/app/nav.yml`)).nav;
 
 		navdat.forEach(e => {
 			if (c) {
@@ -253,7 +283,8 @@ function User(res,req) { // user function
 				fs.chmodSync(`${dirs.dat}/usr`,0o724);
 			}
 			catch (e) {
-				cli.err(true,`${config.app.name} cannot save any user data to this directory:\n\n${h}\n\n${e}`,`Check the permissions of the user you run this node app as on that directory.`);
+				cli.err(`${config.app.name} cannot save any user data to this directory:\n\n${h}\n\n${e}`,`Check the permissions of the user you run this node app as on that directory.`);
+				process.exit(1);
 			}
 		}
 
@@ -296,7 +327,7 @@ function User(res,req) { // user function
 
 	this.login = c => { // login for user
 		if (c) {
-			term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/app/index.xhtml`,'ru'));
+			term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/app/index.xhtml`,'ru'));
 		}
 		else {
 			term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/public/index.xhtml`,'r'));
@@ -609,7 +640,8 @@ const // auth
 				return JSON.parse(rd(`${dirs.dat}/auth/root/keys.hash`))[t];
 			}
 			catch (e) {
-				cli.err(true,`There was an error retrieving root account credentials:\n\n${e}`);
+				cli.err(`There was an error retrieving root account credentials:\n\n${e}`);
+				process.exit(1);
 			}
 		}
 	},
@@ -633,9 +665,11 @@ if (rd(`${dirs.usr}/${config.app.alt_name}-data/init`)) {
 		cli.clear(); cli.log(`Server running at https://${ip.address()}:${config.server.port}\n\n`);
 	}
 	catch (e) {
-		cli.err(true,`The server could not be initiated:\n\n${e}`);
+		cli.err(`The server could not be initiated:\n\n${e}`);
+		process.exit(1);
 	}
 }
 else {
-	cli.err(true,'You cannot initiate the server without executing configure first!',`Set your current working directory to the root directory of this project, and run the following:\n\n${'./configure'.bold}\n\nAfter that, you can initiate the server.`);
+	cli.err('You cannot initiate the server without executing configure first!',`Set your current working directory to the root directory of this project, and run the following:\n\n${'./configure'.bold}\n\nAfter that, you can initiate the server.`);
+	process.exit(1);
 }
