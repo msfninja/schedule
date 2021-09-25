@@ -12,10 +12,10 @@ server:
   port: 150 # default listened port
   root:
     session:
-      time: 3600 # 1 hour
+      time: 3600000 # 1 hour
   usr:
     session:
-      time: 31104000000 # 1 year
+      time: 31536000000 # 1 year
   security:
     token_length: 96 # only with steps of 32
     recover_token_length: 96 # only with steps fo 32
