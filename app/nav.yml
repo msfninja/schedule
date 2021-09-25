@@ -1,0 +1,22 @@
+---
+nav:
+- name: "To-dos"
+  icon: "check-all"
+  href: "#to-dos"
+  nav: true
+- name: "Notes"
+  icon: "journals"
+  href: "#notes"
+  nav: true
+- name: "Other"
+  icon: "three-dots"
+  href: "#other"
+  nav: true
+- name: "Calendar"
+  icon: "calendar-date"
+  href: "#calendar"
+  nav: false
+- name: "School"
+  icon: "book"
+  href: "#school"
+  nav: false
