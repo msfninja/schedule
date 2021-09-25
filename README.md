@@ -312,7 +312,7 @@ This will compile the code only once though. If you want to automate the compila
 sass -w ./server/client/sass/stylesheet.sass ./public/client/stylesheet.css
 ```
 
-By default, sass will also make a source map along the compiled CSS style sheet. If you don't want a source map, you can add the `--no-source-map` option.
+By default, Sass will also make a source map along the compiled CSS style sheet. If you don't want a source map, you can add the `--no-source-map` option.
 
 ### Compiling CoffeeScript Code
 
