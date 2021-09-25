@@ -21,4 +21,4 @@ server:
     recover_token_length: 96 # only with steps fo 32
     salt_rounds: 10 # for bcrypt password hashing
 cli:
-  name: "sch" # name of CLI command
+  name: "sch" # name of cli command
