@@ -159,7 +159,7 @@ html
 					.h#{$i}
 						font-size: #{(7 - $i) * 9}pt
 
-			@for $i from 1 through 25
+			@for $i from 1 through 15
 				$j: $i * 10
 
 				.ws#{$j}
@@ -181,7 +181,7 @@ html
 					@extend .vws#{$j}
 
 			@media screen and (max-width: $desktop-min-width)
-				@for $i from 1 through 25
+				@for $i from 1 through 15
 					$j: $i * 10
 
 					.fws#{$j}
