@@ -6,7 +6,7 @@ If you found a security vulnerability in Schedule, you can report it. Read below
 
 |Version|Supported|
 |---|---|
-|0.0.x|:white_check_mark:|
+|0.0.x|Yes|
 
 ## Reporting a Vulnerability
 
