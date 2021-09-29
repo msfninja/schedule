@@ -1,0 +1,69 @@
+{component.doctype}
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" dir="ltr">
+	<head>
+		{component.meta}
+		{component.link}
+		<title>{app.name}</title>
+	</head>
+	<body>
+		{component.noscript}
+		{component.loader}
+		<div style="opacity: 0;" id="cnt">
+			{component.header}
+			<main>
+				<section id="intro-bg" style="background-image: url('/client/media/img/def/img_0000.jpg') !important; filter: brightness(.7);"></section>
+				<section id="intro" style="background-color: #2d50bb80;">
+					<div class="h1">
+                                            <span>{app.name}</span>
+                                        </div>
+					<div class="ws100" />
+					<div>
+						<form method="post" action="/usr">
+							<input type="hidden" name="type" value="sign-in" />
+							<input class="usr" type="text" name="usr" placeholder="Username" required="true" /><br class="mobile" /><input class="psw" type="password" name="psw" placeholder="Password" required="true" /><br class="mobile" /><button class="sbm btn-sbm" type="submit"><span><i class="bi bi-box-arrow-right"></i></span></button>
+						</form>
+					</div>
+					<div class="ws30" />
+					<div>
+						<span>New here? <a class="link-blank" href="/sign-up">Sign up</a>!</span>
+					</div>
+				</section>
+				<section>
+					<div class="h3">
+						<span>{app.title}</span>
+					</div>
+					<div class="ws25" />
+					<div>
+						<span>{app.desc}</span>
+					</div>
+					<div class="ws100" />
+					<div class="h3">
+						<span>Progressive Web Application</span>
+					</div>
+					<div class="ws25" />
+					<div>
+						<span>{app.name} features a PWA, so you can easily access it from anywhere, any device, with just 1 click or tap away.</span>
+					</div>
+					<div class="ws100" />
+					<div class="h3">
+						<span>Privacy, 256-Bit AES Encryption</span>
+					</div>
+					<div class="ws25" />
+					<div>
+						<span>{app.name} is privacy-friendly, and stores all you private information, including todos and notes, encrypted, so nobody but you can see them.</span>
+					</div>
+					<div class="ws100" />
+					<div class="h3">
+						<span>Open Source</span>
+					</div>
+					<div class="ws25" />
+					<div>
+						<span>{app.name} is open source, so you can take a look at its source code and see how the thing works for yourself.</span>
+					</div>
+				</section>
+			</main>
+			{component.footer}
+		</div>
+		{component.script}
+	</body>
+</html>
