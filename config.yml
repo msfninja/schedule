@@ -20,5 +20,6 @@ server:
     token_length: 96 # only with steps of 32
     recover_token_length: 96 # only with steps fo 32
     salt_rounds: 10 # for bcrypt password hashing
+    pbkdf2_iter: 1000 # pbkdf2 password key derivation iteration count
 cli:
   name: "sch" # name of cli command
