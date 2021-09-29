@@ -1,11 +1,6 @@
 // Schedule node app server source code. This file was
 // written by msfninja <msfninja@airmail.cc>.
 //
-// See the Schedule wiki
-// (https://github.com/msfninja/schedule/wiki) for
-// documentation on how this file works, how to use it
-// and how to modify it in a proper way.
-//
 // (c) 2021 Schedule
 
 'use strict';
@@ -125,7 +120,9 @@ const // app functions
 				}
 
 				for (const prop in config.app) {
-					html = html.replace(new RegExp(`\{app\.${prop}\}`,'g'),config.app[prop]);
+					if (typeof config[prop] !== 'object') {
+						html = html.replace(new RegExp(`\{app\.${prop}\}`,'g'),config.app[prop]);
+					}
 				}
 			}
 			if (modes.includes(accept[accept.indexOf('u')])) {
@@ -227,10 +224,10 @@ function Root(res,req) { // root function // NOT READY FOR USE
 
 	this.login = c => { // login for root
 		if (c) {
-			term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/root/panel/index.xhtml`,'arx'));
+			term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/root/panel/index.xhtml`,'arx'));
 		}
 		else {
-			term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/root/index.xhtml`,'ar'));
+			term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/root/index.xhtml`,'ar'));
 		}
 	};
 
@@ -262,18 +259,22 @@ function User(res,req) { // user function
 	this.create = o => { // create user account
 		let
 			hash = bcrypt.hash(o.psw,config.server.security.salt_rounds,(err,hash) => {
+				if (err) throw err;
 				return hash;
 			}),
+			key = crypto.pbkdf2(hash,guuid(),config.server.security.pbkdf2_iter,32,'sha512',(err,key) => {
+				if (err) throw err;
+				return key;
+			}),
+			ckey = getuuid(1),
 			obj = {
 				usr: o.usr,
-				hash: hash
+				hash: hash,
+				key: encrypt(key,ckey),
+				ckey: ckey
 			},
 			h = `${dirs.dat}/usr/${obj.usr}`,
-			arr = [
-				`${h}/cnt/calendar`,
-				`${h}/cnt/notes`,
-				`${h}/cnt/to-dos`
-			];
+			arr = [ `${h}/cnt` ];
 
 		try {
 			fs.accessSync(`${dirs.dat}/usr`,fs.constants.R_OK | fs.constants.W_OK);
@@ -330,7 +331,7 @@ function User(res,req) { // user function
 			term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/app/index.xhtml`,'ru'));
 		}
 		else {
-			term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/public/index.xhtml`,'r'));
+			term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/public/index/index.xhtml`,'r'));
 		}
 	};
 
@@ -382,24 +383,45 @@ function UTokens(res) { // user tokens function
 			obj = {
 				usr: u,
 				tkn: token,
+				crt: time,
 				exp: time + expires
 			};
+
 		if (utokens) arr = utokens;
+
 		arr.push(obj);
+
 		fs.writeFile(`${dirs.dat}/auth/usr/tokens.json`,JSON.stringify(arr),err => {
 			if (err) term(res,500,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/client/err/500.xhtml`,'r'));
 		});
+
 		obj = JSON.parse(rd(`${dirs.dat}/usr/${u}/data.json`));
-		obj.utoken = token;
+		obj.tkn = token;
+
 		fs.writeFile(`${dirs.dat}/usr/${u}/data.json`,JSON.stringify(obj),err => {
 			if (err) term(res,500,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/client/err/500.xhtml`,'r'));
 		});
-		if (c) term(res,302,{'Set-Cookie':`UTOKEN=${token}; Path=/; Expires=${new Date(time + expires).toUTCString()};`,'Location':'/usr'});
+
+		let
+			exp = new Date(time + expires).toUTCString(),
+			cookie = {
+				tkn: `UTOKEN=${token}; Path=/; Expires=${exp};`,
+				hsh: `HASH=${obj.key}; Path=/; Expires=${exp};`,
+				cky: `KEY=${obj.ckey}; Path=/; Expires=${exp};`
+			};
+
+		if (c) term(res,302,[
+			['Set-Cookie',cookie.tkn],
+			['Set-Cookie',cookie.hsh],
+			['Set-Cookie',cookie.cky],
+			['Location','/usr']
+		]);
 	};
 
 	this.verify = t => { // verify user token
 		if (utokens) {
 			let tkn = utokens.find(e => e.tkn === t);
+
 			if (tkn) return true;
 		}
 		return false;
@@ -413,14 +435,14 @@ function UTokens(res) { // user tokens function
 				target = utokens.find(e => e.tkn === t);
 
 			if (target) {
-				if (c) {
+				if (c || target.exp > new Date().valueOf()) {
 					utokens.splice(utokens.indexOf(target),1);
 					fs.writeFile(`${dirs.dat}/auth/usr/tokens.json`,JSON.stringify(utokens),err => {
 						if (err) throw err;
 					});
 				}
 				if (d) {
-					delete dat.utoken;
+					delete dat.tkn;
 					fs.writeFile(`${dirs.dat}/usr/${dat.usr}/data.json`,JSON.stringify(dat),err => {
 						if (err) throw err;
 					});
@@ -525,17 +547,17 @@ const // https server
 					term(res,302,{'Location':'/usr'});
 				}
 				else {
-					term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/public/index.xhtml`,'r'));
+					term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/public/index/index.xhtml`,'r'));
 				}
 			}
 			else if (p.split('/')[1] === 'sign-up') {
-				term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/public/sign-up/index.xhtml`,'r'));
+				term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/public/index/sign-up/index.xhtml`,'r'));
 			}
 			else if (p.split('/')[1] === 'privacy') {
-				term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/public/privacy/index.xhtml`,'r'));
+				term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/public/index/privacy/index.xhtml`,'r'));
 			}
 			else if (p.split('/')[1] === 'cookies') {
-				term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/public/cookies/index.xhtml`,'r'));
+				term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/public/index/cookies/index.xhtml`,'r'));
 			}
 			else if (p.split('/').includes('usr')) {
 				if (p.split('/')[1] === 'usr') {
@@ -619,8 +641,8 @@ const // crypt functions
 	decrypt = (h,k) => {
 		const
 			decipher = crypto.createDecipheriv(algorithm,k,Buffer.from(h.iv,'hex')),
-			decrpyted = Buffer.concat([decipher.update(Buffer.from(h.content,'hex')),decipher.final()]);
-		return decrpyted.toString();
+			decrypted = Buffer.concat([decipher.update(Buffer.from(h.content,'hex')),decipher.final()]);
+		return decrypted.toString();
 	};
 
 const // security
@@ -635,6 +657,7 @@ const // security
 const // auth
 	keys = t => {
 		let h = `${dirs.dat}/auth/root/keys.hash`;
+
 		if (ex(h)) {
 			try {
 				return JSON.parse(rd(`${dirs.dat}/auth/root/keys.hash`))[t];
@@ -647,6 +670,7 @@ const // auth
 	},
 	guid = () => {
 		let str = rd(`${dirs.dat}/auth/guid.asc`);
+
 		if (str.split('').length !== 32) {
 			let nguuid = getuuid(1);
 			fs.writeFile(`${dirs.dat}/auth/guid.asc`,nguuid,err => {
@@ -659,7 +683,9 @@ const // auth
 
 if (rd(`${dirs.usr}/${config.app.alt_name}-data/init`)) {
 	try {
-		(async () => { await dbclient.connect(); })();
+		(async () => {
+			await dbclient.connect();
+		})();
 		db = dbclient.db(config.app.alt_name);
 		start(config.server.port);
 		cli.clear(); cli.log(`Server running at https://${ip.address()}:${config.server.port}\n\n`);
