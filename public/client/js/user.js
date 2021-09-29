@@ -63,4 +63,8 @@
 
   switchTab('#to-dos', window.location.hash);
 
+  // xhr = new 
+
+  // qs('#school-list')[0].
+
 }).call(this);
