@@ -21,13 +21,13 @@ switchTab = (p,n) ->
 		qs("\##{n}")[0].style.opacity = '1'
 
 		if qs("\##{n}")[0].dataset.nav
-			qs("\#btn-nav-#{n}")[0].classList.add('selected')
+			qs("\#btn-nav-#{n}")[0].classList.add 'selected'
 
 		tabs.forEach (e) ->
 			if e.id isnt n
 				e.style.opacity = '0'
 				if e.dataset.nav
-					qs("#btn-nav-#{e.id}")[0].classList.remove('selected')
+					qs("#btn-nav-#{e.id}")[0].classList.remove 'selected'
 			return
 
 		if tabsArr.indexOf(n) > tabsArr.indexOf(p)
@@ -54,3 +54,7 @@ window.onhashchange = ->
 
 window.location.hash = '#to-dos'
 switchTab '#to-dos',window.location.hash
+
+# xhr = new 
+
+# qs('#school-list')[0].
