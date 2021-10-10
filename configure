@@ -1,9 +1,19 @@
 #! /bin/bash
 
-mkdir -p ~/schedule-data/auth/root
-mkdir -p ~/schedule-data/auth/usr
-mkdir -p ~/schedule-data/public/school
-mkdir -p ~/schedule-data/usr
-mkdir -p ~/schedule-data/root
+dirs=(
+	auth/root
+	auth/usr
+	public/school
+	server
+	usr
+	root
+)
 
-echo true > ~/schedule-data/init
+for i in ${dirs[@]}
+do
+	mkdir -p "$HOME/schedule-data/$i"
+done
+
+echo true > "$HOME/schedule-data/server/init"
+
+exit 0
