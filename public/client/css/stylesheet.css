@@ -7,7 +7,7 @@
   font-family: "ZillaSlab";
   src: url("/client/media/font/ZillaSlab.ttf");
 }
-html {
+:root {
   touch-action: manipulation;
   -o-touch-action: manipulation;
   -xv-touch-action: manipulation;
@@ -28,6 +28,7 @@ html {
   -prince-touch-action: manipulation;
   scroll-behavior: smooth;
 }
+
 html body {
   margin: 0;
   background: #333333;
@@ -111,7 +112,6 @@ html body #cnt * {
   -apple-appearance: none;
   -webkit-appearance: none;
   -prince-appearance: none;
-  transition: all 150ms cubic-bezier(0.25, 0.1, 0.25, 1) 0ms;
 }
 html body #cnt .row {
   display: flex;
@@ -480,7 +480,7 @@ html body #cnt .vws150, html body #cnt .fivws150, html body #cnt .fvws150 {
     height: 75px;
   }
 }
-html body #cnt header[id=desktop] {
+html body #cnt header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -489,40 +489,31 @@ html body #cnt header[id=desktop] {
   top: 0;
   right: 0;
   left: 0;
-  display: flex;
-  padding: 10px;
   background-color: #292929aa;
   transform: translate(0, -100%);
+  transition: all 150ms cubic-bezier(0.25, 0.1, 0.25, 1) 0ms;
   z-index: 9000;
 }
-html body #cnt header[id=desktop] .header-logo {
+html body #cnt header .header-logo {
   border-radius: 7px;
+  background: transparent url("/client/media/img/logo/icon192.png") 50% 50%/contain no-repeat padding-box border-box scroll;
+}
+html body #cnt header[id=desktop] {
+  display: flex;
+  padding: 10px;
+}
+html body #cnt header[id=desktop] .header-logo {
   width: 40px;
   height: 40px;
-  background: transparent url("/client/media/img/logo/icon192.png") 50% 50%/contain no-repeat padding-box border-box scroll;
   cursor: pointer;
 }
 html body #cnt header[id=mobile] {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
   display: none;
   padding: 7px;
-  background-color: #292929aa;
-  transform: translate(0, -100%);
-  z-index: 9000;
 }
 html body #cnt header[id=mobile] .header-logo {
-  border-radius: 10px;
   width: 40px;
   height: 40px;
-  background: transparent url("/client/media/img/logo/icon192.png") 50% 50%/contain no-repeat padding-box border-box scroll;
-  cursor: pointer;
 }
 html body #cnt main section {
   padding: 100px;
@@ -531,7 +522,7 @@ html body #cnt main #intro-bg {
   position: relative;
   height: 100vh;
   padding: 0;
-  background: transparent none 50% 50%/cover no-repeat padding-box border-box fixed;
+  background: transparent none 0% 0%/cover no-repeat padding-box border-box fixed;
 }
 html body #cnt main #intro {
   display: flex;
@@ -670,10 +661,12 @@ html body #cnt input {
   border: none;
   border-radius: 0.875rem;
   font-size: 16pt;
+  min-width: 200px;
   padding: 15px;
   background-color: #515151cc;
   color: #ffffff;
   outline: none;
+  transition: all 150ms cubic-bezier(0.25, 0.1, 0.25, 1) 0ms;
 }
 html body #cnt input:focus {
   background-color: #656565;
@@ -682,11 +675,14 @@ html body #cnt .btn-sbm {
   border: none;
   border-radius: 0.875rem;
   font-size: 16pt;
+  min-width: 200px;
   padding: 15px;
   background-color: #515151cc;
   color: #ffffff;
   outline: none;
-  cursor: pointer;
+  transition: all 150ms cubic-bezier(0.25, 0.1, 0.25, 1) 0ms;
+  min-width: auto !important;
+  cursor: pointer !important;
 }
 html body #cnt .btn-sbm:focus {
   background-color: #656565;
@@ -716,15 +712,78 @@ html body #cnt .sup {
   top: -0.4em;
 }
 html body #cnt .link {
+  appearance: none;
+  -o-appearance: none;
+  -xv-appearance: none;
+  -ah-appearance: none;
+  -hp-appearance: none;
+  -ro-appearance: none;
+  -tc-appearance: none;
+  -ms-appearance: none;
+  -mso-appearance: none;
+  -rim-appearance: none;
+  -moz-appearance: none;
+  -wap-appearance: none;
+  -atsc-appearance: none;
+  -konq-appearance: none;
+  -khtml-appearance: none;
+  -apple-appearance: none;
+  -webkit-appearance: none;
+  -prince-appearance: none;
+  position: relative;
   text-decoration: none;
   color: #7070e0;
 }
-html body #cnt .link:hover {
-  text-decoration: underline;
+html body #cnt .link:after {
+  border-bottom: medium ridge #7070e0;
+  position: absolute;
+  right: 0;
+  bottom: -2px;
+  display: block;
+  width: 0;
+  content: "";
+  transition: all 150ms cubic-bezier(0.25, 0.1, 0.25, 1) 0ms;
+}
+html body #cnt .link:hover:after {
+  width: 100%;
 }
 html body #cnt .link-blank {
-  text-decoration: underline;
-  color: #ffffff;
+  text-decoration: none !important;
+  color: #ffffff !important;
+}
+html body #cnt .link-blank:after {
+  border-color: #ffffff !important;
+}
+@media screen and (max-width: 1000px) {
+  html body #cnt .link {
+    appearance: none;
+    -o-appearance: none;
+    -xv-appearance: none;
+    -ah-appearance: none;
+    -hp-appearance: none;
+    -ro-appearance: none;
+    -tc-appearance: none;
+    -ms-appearance: none;
+    -mso-appearance: none;
+    -rim-appearance: none;
+    -moz-appearance: none;
+    -wap-appearance: none;
+    -atsc-appearance: none;
+    -konq-appearance: none;
+    -khtml-appearance: none;
+    -apple-appearance: none;
+    -webkit-appearance: none;
+    -prince-appearance: none;
+    position: static;
+    text-decoration: underline !important;
+    color: #7070e0;
+  }
+  html body #cnt .link:after {
+    border: none;
+  }
+  html body #cnt .link-blank {
+    text-decoration: underline !important;
+  }
 }
 
 @media screen and (max-width: 1000px) {
