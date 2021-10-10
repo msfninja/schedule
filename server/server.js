@@ -39,11 +39,18 @@ let // config and db
 	db;
 
 try {
-	config = YAML.parse(fs.readFileSync(path.join(path.resolve(__dirname,'..'),'config.yml')).toString());
+	config = YAML.parse(
+		fs.readFileSync(
+			path.join(path.resolve(__dirname,'..'),'config.yml')
+		).toString());
+
 	if (!config) throw new Error('The config.yml file seems to be incorrectly configured.');
 }
 catch (e) {
-	cli.err(e,`Download the proper config.yml file from the repository:\n\n${repo.gh.blob}/config.yml`);
+	cli.err(
+		e,
+		`Download the proper config.yml file from the repository:\n\n${repo.gh.blob}/config.yml`
+	);
 	process.exit(1);
 }
 
@@ -60,8 +67,12 @@ const // mongodb
 
 const // ssl
 	opt = {
-		key: fs.readFileSync(`${dir}/server/ssl/key.pem`),
-		cert: fs.readFileSync(`${dir}/server/ssl/cert.pem`)
+		key: fs.readFileSync(
+			path.join(dir,'server/ssl/key.pem')
+		),
+		cert: fs.readFileSync(
+			path.join(dir,'server/ssl/cert.pem')
+		)
 	};
 
 const // basic operations
@@ -81,7 +92,7 @@ const // basic operations
 		};
 	},
 	format = s => {
-		return s.toLowerCase().replace(/[^a-z0-9\-]/g,'').replace(/ /g,'-'); 
+		return s.toLowerCase().replace(/[^a-z0-9\-]/g,'').replace(/[\t \n]/g,'-'); 
 	};
 
 const // app functions
@@ -99,7 +110,7 @@ const // app functions
 				[
 					'doctype',
 					'footer',
-					'hedaer',
+					'header',
 					'link',
 					'loader',
 					'meta',
@@ -116,12 +127,20 @@ const // app functions
 		if (compare(modes,accept).match) {
 			if (modes.includes(accept[accept.indexOf('r')])) {
 				for (var i = components[0].length - 1; i >= 0; i--) {
-					html = html.replace(new RegExp(`\{component\.${components[0][i]}\}`,'g'),rd(`${dir}/server/client/component/${components[0][i]}.xhtml`));
+					html = html.replace(
+						new RegExp(`\{component\.${components[0][i]}\}`,'g'),
+						rd(
+							path.join(dir,`server/client/component/${components[0][i]}.xhtml`)
+						)
+					);
 				}
 
 				for (const prop in config.app) {
 					if (typeof config[prop] !== 'object') {
-						html = html.replace(new RegExp(`\{app\.${prop}\}`,'g'),config.app[prop]);
+						html = html.replace(
+							new RegExp(`\{app\.${prop}\}`,'g'),
+							config.app[prop]
+						);
 					}
 				}
 			}
@@ -132,7 +151,12 @@ const // app functions
 					dat = user.request('tkn',cookie['UTOKEN']);
 
 				for (var i = components[1].length - 1; i <= 0; i--) {
-					html = html.replace(new RegExp(`\{component\.${components[1][i]}\}`,'g'),rd(`${dir}/server/client/component/${components[1][i]}.xhtml`));
+					html = html.replace(
+						new RegExp(`\{component\.${components[1][i]}\}`,'g'),
+						rd(
+							path.join(dir,`server/client/component/${components[1][i]}.xhtml`)
+						)
+					);
 				}
 
 				html = html
@@ -195,14 +219,13 @@ function CLI() {
 		console.log(`${config.cli.name.blue.bold}> ${s}`);
 	};
 
-	this.err = (t,e,s) => {
+	this.err = (e,s) => {
 		console.clear();
 		console.error(`${'\nERROR:'.red.bold}\n\n${e}\n`);
 		if (s) console.log(`${'SOLUTION:'.blue.bold}\n\n${s}\n`);
-		if (t) process.exit(1);
 	};
 
-	this.clear = () => {
+	this.cls = () => {
 		console.clear();
 	};
 }
@@ -234,8 +257,13 @@ function Root(res,req) { // root function // NOT READY FOR USE
 	this.cred = (t,a) => { // credentials recovery // NOT READY FOR USE
 		if (t === 'set') {
 			let obj = {};
+			
 			obj.usr = a[0];
-			obj.psw = encrypt(a[1],`${a[1]}${guid()}`.substr(0,32));
+			obj.psw = encrypt(
+				a[1],
+				`${a[1]}${guid()}`.substr(0,32)
+			);
+
 			fs.writeFile(`${dirs.dat}/auth/root/dat/keys.hash`,JSON.stringify(obj),err => {
 				if (err) throw err;
 			});
@@ -258,68 +286,117 @@ function User(res,req) { // user function
 
 	this.create = o => { // create user account
 		let
-			hash = bcrypt.hash(o.psw,config.server.security.salt_rounds,(err,hash) => {
-				if (err) throw err;
-				return hash;
+			hash = bcrypt.hash(o.psw,config.server.security.salt_rounds,(e,h) => {
+				if (e) throw e;
+				return h;
 			}),
-			key = crypto.pbkdf2(hash,guuid(),config.server.security.pbkdf2_iter,32,'sha512',(err,key) => {
-				if (err) throw err;
-				return key;
+			key = crypto.pbkdf2(hash,guuid(),config.server.security.pbkdf2_iter,32,'sha512',(e,k) => {
+				if (e) throw e;
+				return k;
 			}),
-			ckey = getuuid(1),
+			ckey = getuuid(2).substring(0,32),
 			obj = {
 				usr: o.usr,
 				hash: hash,
 				key: encrypt(key,ckey),
 				ckey: ckey
 			},
-			h = `${dirs.dat}/usr/${obj.usr}`,
-			arr = [ `${h}/cnt` ];
+			h = path.join(dirs.dat,'usr',obj.usr),
+			arr = [ path.join(h,'cnt') ];
+
+		o = null;
 
 		try {
-			fs.accessSync(`${dirs.dat}/usr`,fs.constants.R_OK | fs.constants.W_OK);
+			fs.accessSync(
+				path.join(dirs.dat,'usr'),
+				fs.constants.R_OK | fs.constants.W_OK
+			);
 		}
 		catch (e) {
 			try {
-				fs.chmodSync(`${dirs.dat}/usr`,0o724);
+				fs.chmodSync(
+					path.join(dirs.dat,'usr'),
+					0o724
+				);
 			}
-			catch (e) {
-				cli.err(`${config.app.name} cannot save any user data to this directory:\n\n${h}\n\n${e}`,`Check the permissions of the user you run this node app as on that directory.`);
+			catch (f) {
+				cli.err(
+					`${config.app.name} cannot save any user data to this directory:\n\n${h}\n\n${f}`,
+					`Check the permissions of the user you run this node app as on that directory.`
+				);
 				process.exit(1);
 			}
 		}
 
 		arr.forEach(e => {
-			fs.mkdirSync(e,{ recursive: true });
+			fs.mkdirSync(
+				e,
+				{ recursive: true }
+			);
 		});
 
-		fs.writeFile(`${h}/data.json`,JSON.stringify(obj),err => {
-			if (err) throw err;
+		fs.writeFile(
+			path.join(dirs.dat,'usr',obj.usr,'data.json'),
+			JSON.stringify({
+				tkn: null
+			}),
+			e => {
+				if (e) throw e;
+			}
+		);
+
+		db.collection('users').insertOne(obj,e => {
+			if (e) throw e;
 			utokens.create(obj.usr,true);
 		});
 	};
 
 	this.verify = a => { // verify user credentials or token
 		if (a) {
-			if (Object.prototype.toString.call(a) === '[object Array]') {
-				let usr = fs.readdirSync(`${dirs.dat}/usr`).find(e => e === obj.usr);
+			if (typeof a === 'object' && !Array.isArray(a)) {
+				let
+					usr = async () => {
+						await db.collection('users').find({},(e,r) => {
+							if (e) throw e;
+							r.toArray((f,s) => {
+								if (f) throw f;
+								return s;
+							});
+						}).find(e => e === a.usr);
+					};
 
 				if (usr) {
 					let
 						obj = {
 							usr: usr,
-							psw: a[1]
+							psw: a.psw
 						},
-						dat = JSON.parse(rd(`${dirs.dat}/usr/${obj.usr}/data.json`)),
-						match = bcrypt.compare(obj.psw,dat.hash,(err,res) => {
-							return err ? false : res;
+						dat = JSON.parse(
+							rd(
+								path.join(dirs.dat,'usr',obj.usr,'data.json')
+							)
+						),
+						match = bcrypt.compare(obj.psw,dat.hash,(e,r) => {
+							return e ? false : r;
 						});
 
-					if (dat.usr === obj.usr && match) return true;
+					return dat.usr === obj.usr && match;
 				}
 			}
 			else if (typeof a === 'string') {
-				let tkn = fs.readdirSync(`${dirs.dat}/usr`).find(e => utokens.verify(JSON.parse(rd(`${dirs.dat}/usr/${e}/data.json`)).utoken));
+				let
+					tkn = fs.readdirSync(
+						path.join(dirs.dat,'usr')
+					).find(e =>
+						utokens.verify(
+							JSON.parse(
+								rd(
+									path.join(dirs.dat,'usr',e,'data.json')
+								)
+							).utoken
+						)
+					);
+
 				return tkn ? true : false;
 			}
 		}
@@ -328,34 +405,74 @@ function User(res,req) { // user function
 
 	this.login = c => { // login for user
 		if (c) {
-			term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/app/index.xhtml`,'ru'));
+			term(
+				res,200,
+				{ 'Content-Type': 'application/xhtml+xml' },
+				render(
+					res,req,
+					path.join(dir,'app/index.xhtml'),
+					'ru'
+				)
+			);
 		}
 		else {
-			term(res,200,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/public/index/index.xhtml`,'r'));
+			term(
+				res,200,
+				{ 'Content-Type': 'application/xhtml+xml' },
+				render(
+					res,req,
+					path.join(dir,'public/index/index.xhtml'),
+					'r'
+				)
+			);
 		}
 	};
 
 	this.check = u => { // check if user exists
-		let usr = fs.readdirSync(`${dirs.dat}/usr`).find(e => e === u);
+		let
+			usr = async () => {
+				await db.collection('users').find({},(e,r) => {
+					if (e) throw e;
+					return r.usr;
+				});
+			};
+
 		return usr ? true : false;
 	};
 
-	this.request = (t,r) => { // request user data by username or token
-		let usr = fs.readdirSync(`${dirs.dat}/usr`);
+	this.request = (t,d) => { // request user data by username or token
+		let
+			usr = async () => {
+				await db.collection('users').find({},(e,r) => {
+					if (e) throw e;
+					r.toArray((f,s) => {
+						if (e) throw e;
+						return s;
+					});
+				});
+			};
+
 		if (usr) {
 			if (t === 'usr') {
-				let target = usr.find(e => e === r);
+				let target = usr.find(e => e === d);
 
-				if (target) return JSON.parse(rd(`${dirs.dat}/usr/${r}/data.json`));
+				if (target) return target;
 			}
 			else if (t === 'tkn') {
 				if (utokens.get()) {
-					let target = utokens.get().find(e => e.tkn === r);
+					let target = utokens.get().find(e => e.tkn === d);
 
-					if (target) return JSON.parse(rd(`${dirs.dat}/usr/${target.usr}/data.json`));
+					if (target) {
+						return JSON.parse(
+							rd(
+								path.join(dirs.dat,'usr',target.usr,'data.json')
+							)
+						);
+					}
 				}
 			}
 		}
+
 		return false;
 	};
 }
@@ -364,7 +481,11 @@ function UTokens(res) { // user tokens function
 	let utokens;
 
 	try {
-		utokens = JSON.parse(rd(`${dirs.dat}/auth/usr/tokens.json`));
+		utokens = JSON.parse(
+			rd(
+				path.join(dirs.dat,'auth/usr/tokens.json')
+			)
+		);
 	}
 	catch (e) {
 		utokens = false;
@@ -383,7 +504,6 @@ function UTokens(res) { // user tokens function
 			obj = {
 				usr: u,
 				tkn: token,
-				crt: time,
 				exp: time + expires
 			};
 
@@ -391,29 +511,41 @@ function UTokens(res) { // user tokens function
 
 		arr.push(obj);
 
-		fs.writeFile(`${dirs.dat}/auth/usr/tokens.json`,JSON.stringify(arr),err => {
-			if (err) term(res,500,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/client/err/500.xhtml`,'r'));
-		});
+		fs.writeFile(
+			path.join(dirs.dat,'auth/usr/tokens.json'),
+			JSON.stringify(arr),
+			err => {
+				if (err) {
+					term(
+						res,500,
+						{ 'Content-Type': 'application/xhtml+xml' },
+						render(
+							res,req,
+							path.join(dir,'server/client/err/500.xhtml'),
+							'r'
+						)
+					);
+				}
+			}
+		);
 
-		obj = JSON.parse(rd(`${dirs.dat}/usr/${u}/data.json`));
+		obj = JSON.parse(
+			rd(
+				`${dirs.dat}/usr/${u}/data.json`
+			)
+		);
 		obj.tkn = token;
 
 		fs.writeFile(`${dirs.dat}/usr/${u}/data.json`,JSON.stringify(obj),err => {
 			if (err) term(res,500,{'Content-Type':'application/xhtml+xml'},render(res,req,`${dir}/server/client/err/500.xhtml`,'r'));
 		});
 
-		let
-			exp = new Date(time + expires).toUTCString(),
-			cookie = {
-				tkn: `UTOKEN=${token}; Path=/; Expires=${exp};`,
-				hsh: `HASH=${obj.key}; Path=/; Expires=${exp};`,
-				cky: `KEY=${obj.ckey}; Path=/; Expires=${exp};`
-			};
+		let exp = new Date(time + expires).toUTCString();
 
 		if (c) term(res,302,[
-			['Set-Cookie',cookie.tkn],
-			['Set-Cookie',cookie.hsh],
-			['Set-Cookie',cookie.cky],
+			['Set-Cookie',`UTOKEN=${token}; Path=/; Expires=${exp};`],
+			['Set-Cookie',`HASH=${obj.key}; Path=/; Expires=${exp};`],
+			['Set-Cookie',`KEY=${obj.ckey}; Path=/; Expires=${exp};`],
 			['Location','/usr']
 		]);
 	};
@@ -563,16 +695,28 @@ const // https server
 				if (p.split('/')[1] === 'usr') {
 					if (req.method === 'POST') {
 						let body;
+
 						req.on('data',chunk => body = chunk.toString());
 						req.on('end',() => {
 							let post = qs.parse(body);
 
 							if (post.type === 'sign-in') {
 								if (post.usr && post.psw) {
-									if (user.verify([post.usr,post.psw])) {
+									if (
+										user.verify({
+											usr: post.usr.toString(),
+											psw: post.psw.toString()
+										})
+									) {
 										if (!cookie['UTOKEN']) {
 											if (user.request('usr',post.usr).utoken) {
-												term(res,302,{'Set-Cookie':`UTOKEN=${user.request('usr',post.usr).utoken}; Path=/;`,'Location':'/usr'});
+												term(
+													res,302,
+													{
+														'Set-Cookie': `UTOKEN=${user.request('usr',post.usr).utoken}; Path=/;`,
+														'Location': '/usr'
+													}
+												);
 											}
 											else {
 												utokens.create(post.usr,true);
@@ -591,7 +735,9 @@ const // https server
 									else term(res,302,{'Location':'/sign-up'});
 								}
 							}
-							else user.login(false);
+							else {
+								user.login(false);
+							}
 						});
 					}
 					else if (req.method === 'GET') {
@@ -599,8 +745,12 @@ const // https server
 							term(res,302,{'Set-Cookie':'UTOKEN=; Path=/;','Location':'/'});
 						}
 						else if (cookie['UTOKEN']) {
-							if (user.verify(cookie['UTOKEN'])) user.login(true);
-							else term(res,302,{'Location':'/'});
+							if (user.verify(cookie['UTOKEN'])) {
+								user.login(true);
+							}
+							else {
+								term(res,302,{'Location':'/'});
+							}
 						}
 						else term(res,302,{'Location':'/'});
 					}
@@ -681,14 +831,15 @@ const // auth
 		return str;
 	};
 
-if (rd(`${dirs.usr}/${config.app.alt_name}-data/init`)) {
+if (rd(`${dirs.usr}/${config.app.alt_name}-data/server/init`)) {
 	try {
 		(async () => {
 			await dbclient.connect();
 		})();
 		db = dbclient.db(config.app.alt_name);
 		start(config.server.port);
-		cli.clear(); cli.log(`Server running at https://${ip.address()}:${config.server.port}\n\n`);
+		cli.cls();
+		cli.log(`Server running at https://${ip.address()}:${config.server.port}\n\n`);
 	}
 	catch (e) {
 		cli.err(`The server could not be initiated:\n\n${e}`);
@@ -696,6 +847,9 @@ if (rd(`${dirs.usr}/${config.app.alt_name}-data/init`)) {
 	}
 }
 else {
-	cli.err('You cannot initiate the server without executing configure first!',`Set your current working directory to the root directory of this project, and run the following:\n\n${'./configure'.bold}\n\nAfter that, you can initiate the server.`);
+	cli.err(
+		'You cannot initiate the server without executing configure first!',
+		`Set your current working directory to the root directory of this project, and run the following:\n\n${'./configure'.bold}\n\nAfter that, you can initiate the server.`
+	);
 	process.exit(1);
 }
