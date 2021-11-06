@@ -15,8 +15,8 @@
 
 $border-radius: .875rem
 
-$font-body:					[normal normal 400 16pt normal ('FreeSans', sans-serif)]
-$font-heading:				[normal normal 700 100% normal ('ZillaSlab', serif)]
+$font-body:					[normal normal 400 16pt normal ('body', sans-serif)]
+$font-heading:				[normal normal 700 100% normal ('heading', serif)]
 
 $background:				(0: #333333) // change only this value to completely change site's colour palette
 $background-accent:			(0: color.scale(map.get($background,0),$red: 20%,$green: 20%,$blue: 75%))
@@ -59,7 +59,8 @@ $vendors:					['o' 'xv' 'ah' 'hp' 'ro' 'tc' 'ms' 'mso' 'rim' 'moz' 'wap' 'atsc' 
 	border-radius: $border-radius
 	font-size: 16pt
 	min-width: 200px
-	padding: 15px
+	padding: 15px !important
+	margin: 0
 	background-color: #{map.get($background,3)}cc
 	color: $color
 	outline: none
@@ -69,12 +70,12 @@ $vendors:					['o' 'xv' 'ah' 'hp' 'ro' 'tc' 'ms' 'mso' 'rim' 'moz' 'wap' 'atsc' 
 		background-color: map.get($background,5)
 
 @font-face
-	font-family: 'FreeSans'
-	src: url('/client/media/font/FreeSans.otf')
+	font-family: 'body'
+	src: url('/client/media/font/NunitoSans.ttf')
 
 @font-face
-	font-family: 'ZillaSlab'
-	src: url('/client/media/font/ZillaSlab.ttf')
+	font-family: 'heading'
+	src: url('/client/media/font/Nunito.ttf')
 
 :root
 	+cross-p('touch-action','manipulation')
@@ -101,12 +102,9 @@ html
 			z-index: 9999
 
 			#ico
-				border: 3px solid map.get($background-accent,3)
-				border-radius: 50%
 				width: 100px
 				height: 100px
-				margin: 0 0 50px 0
-				animation: rotate 1000ms cubic-bezier(0,0,1,1) 0ms infinite normal none running
+				background: transparent url('/client/media/img/logo/icon192-transparent.png') 50% 50%/contain no-repeat padding-box border-box scroll
 
 			@keyframes rotate
 				0%
@@ -214,14 +212,16 @@ html
 
 				.header-logo
 					border-radius: 7px
-					background: transparent url('/client/media/img/logo/icon192.png') 50% 50%/contain no-repeat padding-box border-box scroll
+					background: transparent url('/client/media/img/logo/logo-transparent-light.png') 50% 50%/contain no-repeat padding-box border-box scroll
 
 				&[id='desktop']
 					display: flex
-					padding: 10px
+					padding: 10px 50px
 
 					.header-logo
-						width: 40px
+						$ratio: math.div(274,40)
+
+						width: #{math.div(1000,$ratio)}px
 						height: 40px
 						cursor: pointer
 
@@ -230,8 +230,11 @@ html
 					padding: 7px
 
 					.header-logo
-						width: 40px
+						$ratio: math.div(274,40)
+
+						width: #{math.div(1000,$ratio)}px
 						height: 40px
+						cursor: pointer
 
 			main
 				section
@@ -273,25 +276,27 @@ html
 						display: block
 						width: 100%
 
-						&::before
-							content: 'Sign in '
+						&::after
+							content: ' Sign in'
 
 			footer
-				padding: 50px 100px
 				background: map.get($background,-2)
+				padding: 50px 100px
 
 				.logo-footer
+					$ratio: math.div(274,50)
+
+					background: transparent url('/client/media/img/logo/logo-transparent-blue.png') 50% 50%/contain no-repeat padding-box border-box scroll
 					border-radius: 10px
-					width: 75px
-					height: 75px
-					background: transparent url('/client/media/img/logo/icon192.png') 50% 50%/contain no-repeat padding-box border-box scroll
 					cursor: pointer
+					height: 75px
+					width: #{math.div(1000,$ratio)}px
 
 				.btn-footer
 					+flexbox('flex','row','center','center')
 
-					font-size: 20pt
 					cursor: pointer
+					font-size: 20pt
 
 					.ico
 						margin: 0 5px
@@ -373,6 +378,7 @@ html
 
 			.btn-sbm
 				+input()
+
 				min-width: auto !important
 				cursor: pointer !important
 

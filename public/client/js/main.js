@@ -27,7 +27,7 @@
   });
 
   document.body.onscroll = function() {
-    if (window.scrollY > 0) {
+    if (window.scrollY > 100) {
       setHdr(false);
     } else {
       setHdr(true);

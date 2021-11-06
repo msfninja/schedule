@@ -1,0 +1,41 @@
+{
+	"name": "schedule",
+	"description": "Schedule is a relatively lightweight self-hosted web app providing you with numerous utilities allowing you to save and sync contacts, to-dos, notes, school information, manage calendars, your own email server and other weird stuff on your server and between your devices featuring a chat all built into a PWA with an interactive CLI and a WebDAV server to configure it.",
+	"dependencies": {
+		"bcrypt": "^5.0.1",
+		"cli": "^1.0.0",
+		"mailparser": "^3.4.0",
+		"mongodb": "^4.1.2",
+		"nodemailer": "^6.7.0",
+		"nodemon": "^2.0.14",
+		"normalize.css": "^8.0.1",
+		"smtp-server": "^3.9.0",
+		"yaml": "2.0.0-8"
+	},
+	"scripts": {
+		"start": "nodemon server/main.js --ignore '*.json'"
+	},
+	"version": "0.0.0",
+	"main": "server/main.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/msfninja/schedule.git"
+	},
+	"keywords": [
+		"nodejs",
+		"schedule",
+		"notes",
+		"todos",
+		"calendar",
+		"timetables",
+		"javascript",
+		"email",
+		"contacts"
+	],
+	"author": "msfninja",
+	"license": "GPL-3.0-only",
+	"bugs": {
+		"url": "https://github.com/msfninja/schedule/issues"
+	},
+	"homepage": "https://github.com/msfninja/schedule#readme"
+}

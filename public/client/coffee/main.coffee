@@ -19,7 +19,7 @@ qs('a').forEach (e) ->
 	return
 
 document.body.onscroll = ->
-	if window.scrollY > 0
+	if window.scrollY > 100
 		setHdr off
 	else
 		setHdr on
