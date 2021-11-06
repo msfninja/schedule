@@ -1,12 +1,14 @@
-**This file is in the process of being written!**
+<h1 align="center">
+	<img src="https://msfninja.000webhostapp.com/schedule/logo/logo-transparent-blue.png" alt="Schedule Logo" width="500" />
+	<br /><br />
+	<p>To-dos, Notes, Calendar and More</p>
+</h1>
 
-# Schedule | To-dos, Notes And More
-
-Official website: [https://143.176.32.149:150](https://143.176.32.149:150).
+Demo hidden onion service: [h73ug4anp73u7uzcr5smaamt3ejgqiumpht5oagtvxbmoeea2uz3quad.onion](https://h73ug4anp73u7uzcr5smaamt3ejgqiumpht5oagtvxbmoeea2uz3quad.onion)
 
 **Please note that currently the project is under development. This means none of the code in this repository is guaranteed to be working.**
 
-Schedule is a web application, allowing you to create and save to-dos, notes, calendar events and other miscellaneous information like your school timetable on a server, and make it accessible, manageable and sync-able from and on any device<sup id="l-ref-1"><a href="#ref-1">1</a></sup>.
+Schedule is a web application, allowing you to create, save and sync contacts, to-dos, notes, calendars, school information and other weird stuff like your school timetable on a server, and make it accessible, manageable and sync-able from and on any device<sup id="l-ref-1"><a href="#ref-1">1</a></sup>.
 
 It's a valuable tool for any student, or generally, anyone who necessitates keeping track of his tasks in the forms of to-os or store information in the forms of memoranda, or even an agenda. Since Schedule is a web application, inferring it is accessed from a web browser<sup id="l-ref-2"><a href="#ref-2">2</a></sup>, it can be used on implicitly any device with a web browser and access to the internet or network on which the server hosting Schedule is running. For accessibility (specifically on mobile devices), Schedule allows a progressive web application that you can install as a (browser emulated) application, which provides access to it with ease right from your device's home screen (or your device-specific environment).
 

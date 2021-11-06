@@ -3,23 +3,24 @@ app:
   name: "Schedule"
   alt_name: "schedule"
   long_name: "Schedule PWA"
-  title: "A To-dos, Notes And More App"
-  desc: "Schedule lets you save to-dos, notes, school timetables and more."
+  title: "To-dos, Notes, Calendar and More"
+  desc: "Schedule is a relatively lightweight self-hosted web app providing you with numerous utilities allowing you to save and sync contacts, to-dos, notes, school information, manage calendars, your own email server and other weird stuff on your server and between your devices featuring a chat all built into a PWA with an interactive CLI and a WebDAV server to configure it."
   version: "0.0.0" # current version
   release:
     tag: "Unreleased" # current release
 server:
-  port: 150 # default listened port
+  port: 80 # port for unsecured connections (will be redirected to port_tls)
+  port_tls: 443 # port for TLS connections
   root:
     session:
-      time: 3600000 # 1 hour
+      time: 3600000 # 1 hour // milliseconds
   usr:
     session:
-      time: 31536000000 # 1 year
-  security:
-    token_length: 96 # only with steps of 32
-    recover_token_length: 96 # only with steps fo 32
-    salt_rounds: 10 # for bcrypt password hashing
+      time: 31536000000 # 1 year // milliseconds
+  sec:
+    token_length: 96 # with steps of 32!
+    recover_token_length: 96 # with steps fo 32!
+    salt_rounds: 10 # bcrypt password hashing salt rounds
     pbkdf2_iter: 1000 # pbkdf2 password key derivation iteration count
 cli:
-  name: "sch" # name of cli command
+  name: "sch" # cli (shell) command name, you would want to change this before running configure, otherwise re-run

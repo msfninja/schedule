@@ -7,6 +7,8 @@ Unreleased 2021-09-16 msfninja <msfninja@airmail.cc>:
 	 - Client
 	   * A web application accessible from any device (featuring a PWA) to interact with your data
 	 - Server
-	   * A server that handles the whole thing
+	   * A server that handles the general thing
+	     + A HTTP server for handling the web client
+	     + A WebDAV server for remote configuration
 	 - CLI
 	   * A CLI (server-side) that can perform numerous tasks
