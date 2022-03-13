@@ -1,3 +1,7 @@
+This is a dead, unfinished project
+
+---
+
 <h1 align="center">
 	<img src="https://msfninja.000webhostapp.com/schedule/logo/logo-transparent-blue.png" alt="Schedule Logo" width="500" />
 	<br /><br />
